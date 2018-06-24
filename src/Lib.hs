@@ -3,14 +3,14 @@
 {-# LANGUAGE DeriveGeneric #-}
 
 module Lib
-    ( webAppEntry
+    ( webAppEntry, User
     ) where
 
-import Servant
-import Data.Aeson
-import Data.Aeson.Types
-import GHC.Generics
-import Network.Wai.Handler.Warp
+import Servant(serve, Proxy(..), Server, JSON, Get, (:>))
+import Data.Aeson(ToJSON)
+import GHC.Generics(Generic)
+import Network.Wai(Application)
+import Network.Wai.Handler.Warp(run)
 
 type UserAPI = "users" :> Get '[JSON] [User]
 
@@ -28,7 +28,7 @@ users =
   ]
 
 server :: Server UserAPI
-server = return users
+server = pure users
 
 userAPI :: Proxy UserAPI
 userAPI = Proxy
