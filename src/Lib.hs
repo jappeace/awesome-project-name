@@ -3,7 +3,7 @@
 {-# LANGUAGE DeriveGeneric #-}
 
 module Lib
-    ( webAppEntry, User
+    ( webAppEntry
     ) where
 
 import Servant
