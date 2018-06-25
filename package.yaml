@@ -25,6 +25,7 @@ dependencies:
 - aeson # json
 - wai # web application (interface)
 - warp # web application implementation
+- bytestring
 
 library:
   source-dirs: src
