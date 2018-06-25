@@ -13,7 +13,6 @@ import Data.Aeson(ToJSON, FromJSON, encode, decode)
 import GHC.Generics(Generic)
 import Network.Wai(Application)
 import Network.Wai.Handler.Warp(run)
-import Data.Maybe (fromMaybe)
 
 type UserAPI = "users" :> Get '[JSON] [User]
       :<|> "message" :> ReqBody '[JSON] Message :> Post '[JSON] [Message]
