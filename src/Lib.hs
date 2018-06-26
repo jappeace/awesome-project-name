@@ -43,8 +43,8 @@ messageFile = "messages.txt"
 
 messages :: Message -> Handler [Message]
 messages message = do 
-  read <- liftIO $ LBS.readFile messageFile
-  case decode read of
+  result <- liftIO $ LBS.readFile messageFile
+  case decode result of
     Nothing -> pure []
     Just x -> do
       let contents = x ++ [message]
