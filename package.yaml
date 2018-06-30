@@ -26,6 +26,11 @@ dependencies:
 - wai # web application (interface)
 - warp # web application implementation
 - bytestring
+- beam-core
+- beam-migrate
+- beam-postgres
+- postgresql-simple
+- text
 
 library:
   source-dirs: src
