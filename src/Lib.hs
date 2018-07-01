@@ -13,6 +13,7 @@ import Data.Aeson(ToJSON, FromJSON, encode, decode)
 import GHC.Generics(Generic)
 import Network.Wai(Application)
 import Network.Wai.Handler.Warp(run)
+import           Database.PostgreSQL.Simple   (Connection)
 
 type UserAPI = "users" :> Get '[JSON] [User]
       :<|> "message" :> ReqBody '[JSON] Message :> Post '[JSON] [Message]
@@ -41,8 +42,8 @@ users =
 messageFile :: FilePath
 messageFile = "messages.txt"
 
-messages :: Message -> Handler [Message]
-messages message = do 
+messages :: Connection -> Message -> Handler [Message]
+messages connection message = do 
   result <- liftIO $ LBS.readFile messageFile
   case decode result of
     Nothing -> pure []
@@ -51,14 +52,15 @@ messages message = do
       liftIO $ LBS.writeFile messageFile (encode contents)
       return contents
 
-server :: Server UserAPI
-server = (pure users) :<|> messages
+server :: Connection -> Server UserAPI
+server conn= (pure users) :<|> (messages conn)
 
 userAPI :: Proxy UserAPI
 userAPI = Proxy
 
-app :: Application
-app = serve userAPI server
+app :: Connection -> Application
+app conn = serve userAPI (server conn)
 
-webAppEntry :: IO ()
-webAppEntry = run 6868 app
+webAppEntry :: Connection -> IO ()
+webAppEntry conn = do
+  run 6868 (app conn)

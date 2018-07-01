@@ -1,6 +1,11 @@
+{-# LANGUAGE OverloadedStrings #-}
 module Main where
+
+import           Database.PostgreSQL.Simple   (connectPostgreSQL)
 
 import Lib
 
 main :: IO ()
-main = webAppEntry
+main = do
+  conn <- connectPostgreSQL "dbname=awesome_db"
+  webAppEntry conn
