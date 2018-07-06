@@ -1,4 +1,3 @@
-{-# LANGUAGE DuplicateRecordFields #-}
 {-# LANGUAGE TypeApplications #-}
 {-# LANGUAGE StandaloneDeriving    #-}
 {-# LANGUAGE TypeFamilies #-}
@@ -18,7 +17,7 @@ import Data.Text
 import Database.Beam.Migrate.Generics
 
 data MessageT f = Message
-                { _id :: C f Int
+                { _messageId :: C f Int
                 , _from :: PrimaryKey UserT f
                 , _content :: C f Text
                 }
@@ -29,14 +28,14 @@ deriving instance Show Message
 
 instance Table MessageT where
     data PrimaryKey MessageT f = MessageId (Columnar f Int) deriving Generic
-    primaryKey = MessageId . ( _id :: MessageT f -> C f Int)
+    primaryKey = MessageId . _messageId 
 type MessageId = PrimaryKey MessageT Identity -- For convenience
 
 instance Beamable MessageT
 instance Beamable (PrimaryKey MessageT)
 
 data UserT f = User
-                { _id :: C f Int
+                { _userId :: C f Int
                 , _name :: C f Text 
                 , _email :: C f Text 
                 }
@@ -47,7 +46,7 @@ deriving instance Show User
 
 instance Table UserT where
     data PrimaryKey UserT f = UserId (Columnar f Int) deriving Generic
-    primaryKey = UserId . ( _id :: UserT f -> C f Int)
+    primaryKey = UserId . _userId
 type UserId = PrimaryKey UserT Identity -- For convenience
 
 instance Beamable UserT

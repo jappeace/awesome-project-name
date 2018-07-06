@@ -1,6 +1,7 @@
 {-# LANGUAGE DataKinds #-}
 {-# LANGUAGE TypeOperators #-}
 {-# LANGUAGE DeriveGeneric #-}
+{-# LANGUAGE ViewPatterns #-}
 
 module Lib
     ( webAppEntry
@@ -14,6 +15,12 @@ import GHC.Generics(Generic)
 import Network.Wai(Application)
 import Network.Wai.Handler.Warp(run)
 import           Database.PostgreSQL.Simple   (Connection)
+import qualified DB as DB
+import           Database.Beam.Backend.SQL.BeamExtensions (runInsertReturningList)
+
+import qualified Database.Beam                            as Beam
+import qualified Database.Beam.Postgres                            as PgBeam
+import Data.Text(pack, unpack)
 
 type UserAPI = "users" :> Get '[JSON] [User]
       :<|> "message" :> ReqBody '[JSON] Message :> Post '[JSON] [Message]
@@ -43,14 +50,26 @@ messageFile :: FilePath
 messageFile = "messages.txt"
 
 messages :: Connection -> Message -> Handler [Message]
-messages connection message = do 
-  result <- liftIO $ LBS.readFile messageFile
-  case decode result of
-    Nothing -> pure []
-    Just x -> do
-      let contents = x ++ [message]
-      liftIO $ LBS.writeFile messageFile (encode contents)
-      return contents
+messages conn message = do 
+  messages <- liftIO $ 
+    PgBeam.runBeamPostgres conn $ do
+      let user = from message
+      [user] <- runInsertReturningList (DB._users DB.awesomeDB) $ Beam.insertExpressions [DB.User{
+            DB._userId = Beam.default_,
+            DB._name = Beam.val_ (pack $ name $ user ),
+            DB._email = Beam.val_ (pack $ email $ user )
+        }]
+      _ <- runInsertReturningList (DB._messages DB.awesomeDB) $ Beam.insertExpressions $ [DB.Message{
+            DB._messageId = Beam.default_,
+            DB._from = Beam.val_ (Beam.pk user),
+            DB._content = Beam.val_ (pack $ content message)
+        }]
+      Beam.runSelectReturningList $ Beam.select $ do 
+        usr <- (Beam.all_ (DB._users DB.awesomeDB))
+        msg <- Beam.oneToMany_ (DB._messages DB.awesomeDB) DB._from usr
+        pure (msg, usr)
+  pure (fmap (\(msg, usr) -> Message (User (unpack $ DB._name usr) (unpack $ DB._email usr)) (unpack $ DB._content msg)) messages)
+
 
 server :: Connection -> Server UserAPI
 server conn= (pure users) :<|> (messages conn)
