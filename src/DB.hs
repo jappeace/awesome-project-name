@@ -4,6 +4,7 @@
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE DeriveGeneric         #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE OverloadedStrings #-}
 
 -- | db structure and source of truth
 module DB where
@@ -15,6 +16,7 @@ import Database.Beam.Backend.SQL.SQL92
 import           Database.Beam.Postgres
 import Data.Text
 import Database.Beam.Migrate.Generics
+import qualified Data.ByteString as BS
 
 data MessageT f = Message
                 { _messageId :: C f Int
@@ -58,7 +60,11 @@ data AwesomeDb f = AwesomeDb
                       , _messages :: f (TableEntity MessageT) }
                         deriving Generic
 
+connectionString :: BS.ByteString
+connectionString = "dbname=awesome_db"
+
 instance Database be AwesomeDb
+
 
 migrateDB :: CheckedDatabaseSettings Postgres AwesomeDb
 migrateDB = defaultMigratableDbSettings @PgCommandSyntax
