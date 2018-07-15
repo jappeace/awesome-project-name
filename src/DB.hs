@@ -11,9 +11,10 @@ module DB where
 import qualified Data.ByteString                as BS
 import qualified Data.Text                      as Text
 import           Database.Beam
-import           Database.Beam.Migrate.Generics
-import           Database.Beam.Migrate.Types
-import           Database.Beam.Postgres
+import           Database.Beam.Migrate.Generics (defaultMigratableDbSettings)
+import           Database.Beam.Migrate.Types    (CheckedDatabaseSettings,
+                                                 unCheckDatabase)
+import           Database.Beam.Postgres         (PgCommandSyntax, Postgres)
 import           Database.Beam.Postgres.Syntax  (PgColumnSchemaSyntax (..),
                                                  PgDataTypeSyntax (..))
 
