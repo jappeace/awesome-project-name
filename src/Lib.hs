@@ -1,7 +1,6 @@
 {-# LANGUAGE DataKinds #-}
 {-# LANGUAGE TypeOperators #-}
 {-# LANGUAGE DeriveGeneric #-}
-{-# LANGUAGE ViewPatterns #-}
 
 module Lib
     ( webAppEntry
@@ -46,8 +45,6 @@ users =
   [ User "Isaac Newton"    "isaac@newton.co.uk"
   , User "Albert Einstein" "ae@mc2.org"
   ]
-messageFile :: FilePath
-messageFile = "messages.txt"
 
 messages :: Connection -> Message -> Handler [Message]
 messages conn message = do 
@@ -68,7 +65,14 @@ messages conn message = do
         usr <- (Beam.all_ (DB._users DB.awesomeDB))
         msg <- Beam.oneToMany_ (DB._messages DB.awesomeDB) DB._from usr
         pure (msg, usr)
-  pure (fmap (\(msg, usr) -> Message (User (unpack $ DB._name usr) (unpack $ DB._email usr)) (unpack $ DB._content msg)) messages)
+  pure $
+    fmap (
+      \(msg, usr) -> Message
+        (User
+          (unpack $ DB._name usr)
+          (unpack $ DB._email usr))
+        (unpack $ DB._content msg)
+    ) messages
 
 
 server :: Connection -> Server UserAPI

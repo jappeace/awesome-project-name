@@ -68,8 +68,5 @@ connectionString = "dbname=awesome_db"
 instance Database be AwesomeDb
 
 
-migrateDB :: CheckedDatabaseSettings Postgres AwesomeDb
-migrateDB = defaultMigratableDbSettings @PgCommandSyntax
-
 awesomeDB :: DatabaseSettings Postgres AwesomeDb
 awesomeDB = unCheckDatabase migrateDB
