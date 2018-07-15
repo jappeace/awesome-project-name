@@ -3,7 +3,6 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE OverloadedStrings     #-}
 {-# LANGUAGE StandaloneDeriving    #-}
-{-# LANGUAGE TypeApplications      #-}
 {-# LANGUAGE TypeFamilies          #-}
 
 -- | db structure and source of truth
@@ -11,12 +10,6 @@ module DB where
 import qualified Data.ByteString                as BS
 import qualified Data.Text                      as Text
 import           Database.Beam
-import           Database.Beam.Migrate.Generics (defaultMigratableDbSettings)
-import           Database.Beam.Migrate.Types    (CheckedDatabaseSettings,
-                                                 unCheckDatabase)
-import           Database.Beam.Postgres         (PgCommandSyntax, Postgres)
-import           Database.Beam.Postgres.Syntax  (PgColumnSchemaSyntax (..),
-                                                 PgDataTypeSyntax (..))
 
 
 data UserT f = User
@@ -67,6 +60,5 @@ connectionString = "dbname=awesome_db"
 
 instance Database be AwesomeDb
 
-
-awesomeDB :: DatabaseSettings Postgres AwesomeDb
-awesomeDB = unCheckDatabase migrateDB
+awesomeDB :: DatabaseSettings be AwesomeDb
+awesomeDB = defaultDbSettings

@@ -46,16 +46,6 @@ executables:
     dependencies:
     - awesome-project-name
 
-  migrate:
-    main:                migrate.hs
-    source-dirs:         app
-    ghc-options:
-    - -threaded
-    - -rtsopts
-    - -with-rtsopts=-N
-    dependencies:
-    - awesome-project-name
-
 tests:
   awesome-project-name-test:
     main:                Spec.hs
