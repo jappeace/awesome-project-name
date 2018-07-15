@@ -18,6 +18,26 @@ import           Database.Beam.Postgres         (PgCommandSyntax, Postgres)
 import           Database.Beam.Postgres.Syntax  (PgColumnSchemaSyntax (..),
                                                  PgDataTypeSyntax (..))
 
+
+data UserT f = User
+                { _userId :: C f Int
+                , _name   :: C f Text.Text
+                , _email  :: C f Text.Text
+                }
+                  deriving Generic
+type User = UserT Identity
+deriving instance Show UserId
+deriving instance Show User
+
+instance Table UserT where
+    data PrimaryKey UserT f = UserId (Columnar f Int) deriving Generic
+    primaryKey = UserId . _userId
+type UserId = PrimaryKey UserT Identity -- For convenience
+
+instance Beamable UserT
+instance Beamable (PrimaryKey UserT)
+
+  
 data MessageT f = Message
                 { _messageId :: C f Int
                 , _from      :: PrimaryKey UserT f
@@ -35,24 +55,6 @@ type MessageId = PrimaryKey MessageT Identity -- For convenience
 
 instance Beamable MessageT
 instance Beamable (PrimaryKey MessageT)
-
-data UserT f = User
-                { _userId :: C f Int
-                , _name   :: C f Text.Text
-                , _email  :: C f Text.Text
-                }
-                  deriving Generic
-type User = UserT Identity
-deriving instance Show (PrimaryKey UserT Identity)
-deriving instance Show User
-
-instance Table UserT where
-    data PrimaryKey UserT f = UserId (Columnar f Int) deriving Generic
-    primaryKey = UserId . _userId
-type UserId = PrimaryKey UserT Identity -- For convenience
-
-instance Beamable UserT
-instance Beamable (PrimaryKey UserT)
 
 
 data AwesomeDb f = AwesomeDb
