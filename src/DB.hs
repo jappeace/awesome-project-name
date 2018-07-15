@@ -9,11 +9,9 @@
 -- | db structure and source of truth
 module DB where
 import qualified Data.ByteString                  as BS
-import           Data.Text
+import qualified          Data.Text as Text
 import           Database.Beam
-import           Database.Beam.Backend.SQL.SQL92
 import           Database.Beam.Migrate.Generics
-import           Database.Beam.Migrate.SQL.Tables
 import           Database.Beam.Migrate.Types
 import           Database.Beam.Postgres
 import           Database.Beam.Postgres.Syntax    (PgColumnSchemaSyntax (..),
@@ -22,7 +20,7 @@ import           Database.Beam.Postgres.Syntax    (PgColumnSchemaSyntax (..),
 data MessageT f = Message
                 { _messageId :: C f Int
                 , _from      :: PrimaryKey UserT f
-                , _content   :: C f Text
+                , _content   :: C f Text.Text
                 }
                   deriving Generic
 type Message = MessageT Identity
@@ -39,8 +37,8 @@ instance Beamable (PrimaryKey MessageT)
 
 data UserT f = User
                 { _userId :: C f Int
-                , _name   :: C f Text
-                , _email  :: C f Text
+                , _name   :: C f Text.Text
+                , _email  :: C f Text.Text
                 }
                   deriving Generic
 type User = UserT Identity
