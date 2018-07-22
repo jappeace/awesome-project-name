@@ -51,18 +51,21 @@ messages conn message = do
   messages <- liftIO $ 
     PgBeam.runBeamPostgres conn $ do
       let user = from message
-      [user] <- runInsertReturningList (DB._users DB.awesomeDB) $ Beam.insertExpressions [DB.User{
-            DB._userId = Beam.default_,
-            DB._name = Beam.val_ (pack $ name $ user ),
-            DB._email = Beam.val_ (pack $ email $ user )
-        }]
-      _ <- runInsertReturningList (DB._messages DB.awesomeDB) $ Beam.insertExpressions $ [DB.Message{
-            DB._messageId = Beam.default_,
-            DB._from = Beam.val_ (Beam.pk user),
-            DB._content = Beam.val_ (pack $ content message)
-        }]
+      [user] <- runInsertReturningList (DB._ausers DB.awesomeDB) $ 
+          Beam.insertExpressions [DB.User 
+            Beam.default_
+            (Beam.val_ (pack $ name $ user ))
+            (Beam.val_ (pack $ email $ user ))
+        ]
+      _ <- runInsertReturningList (DB._messages DB.awesomeDB) $ 
+          Beam.insertExpressions 
+            [DB.Message 
+              Beam.default_ 
+              (Beam.val_ (Beam.pk user))
+              (Beam.val_ (pack $ content message))
+            ]
       Beam.runSelectReturningList $ Beam.select $ do 
-        usr <- (Beam.all_ (DB._users DB.awesomeDB))
+        usr <- (Beam.all_ (DB._ausers DB.awesomeDB))
         msg <- Beam.oneToMany_ (DB._messages DB.awesomeDB) DB._from usr
         pure (msg, usr)
   pure $

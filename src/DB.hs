@@ -4,6 +4,7 @@
 {-# LANGUAGE OverloadedStrings     #-}
 {-# LANGUAGE StandaloneDeriving    #-}
 {-# LANGUAGE TypeFamilies          #-}
+{-# LANGUAGE DuplicateRecordFields #-}
 
 -- | db structure and source of truth
 module DB where
@@ -13,7 +14,7 @@ import           Database.Beam
 
 
 data UserT f = User
-                { _userId :: C f Int
+                { _id :: C f Int
                 , _name   :: C f Text.Text
                 , _email  :: C f Text.Text
                 }
@@ -24,7 +25,7 @@ deriving instance Show User
 
 instance Table UserT where
     data PrimaryKey UserT f = UserId (Columnar f Int) deriving Generic
-    primaryKey = UserId . _userId
+    primaryKey = UserId . (_id :: UserT f -> C f Int)
 type UserId = PrimaryKey UserT Identity -- For convenience
 
 instance Beamable UserT
@@ -32,7 +33,7 @@ instance Beamable (PrimaryKey UserT)
 
   
 data MessageT f = Message
-                { _messageId :: C f Int
+                { _id :: C f Int
                 , _from      :: PrimaryKey UserT f
                 , _content   :: C f Text.Text
                 }
@@ -43,7 +44,7 @@ deriving instance Show Message
 
 instance Table MessageT where
     data PrimaryKey MessageT f = MessageId (Columnar f Int) deriving Generic
-    primaryKey = MessageId . _messageId
+    primaryKey = MessageId . (_id :: MessageT f -> C f Int)
 type MessageId = PrimaryKey MessageT Identity -- For convenience
 
 instance Beamable MessageT
@@ -51,7 +52,7 @@ instance Beamable (PrimaryKey MessageT)
 
 
 data AwesomeDb f = AwesomeDb
-                      { _users    :: f (TableEntity UserT)
+                      { _ausers    :: f (TableEntity UserT)
                       , _messages :: f (TableEntity MessageT) }
                         deriving Generic
 
