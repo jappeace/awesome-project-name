@@ -1,4 +1,4 @@
-# Revision history for backend
+# Revision history for common
 
 ## 0.1.0.0  -- YYYY-mm-dd
 
