@@ -1,4 +1,4 @@
-name:                awesome-project-name
+name:                backend
 version:             0.1.0.0
 github:              "githubuser/awesome-project-name"
 license:             BSD3
@@ -32,7 +32,6 @@ dependencies:
 - postgresql-simple
 - text
 - common
-
 
 library:
   source-dirs: src

@@ -11,3 +11,4 @@ file-watch:
 update-build:
 	hpack ./backend
 	hpack ./common
+	hpack ./frontend

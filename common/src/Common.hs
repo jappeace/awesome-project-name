@@ -5,7 +5,8 @@
 module Common where
 
 import GHC.Generics(Generic)
-import Servant
+import Servant.API
+import Data.Proxy
 import Data.Aeson(ToJSON, FromJSON)
 type UserAPI = "users" :> Get '[JSON] [User]
       :<|> "message" :> ReqBody '[JSON] Message :> Post '[JSON] [Message]
