@@ -5,4 +5,4 @@ create-db: drop-db
 	createdb $(DB_NAME)
 
 update-build:
-	cabal2nix --hpack --extra-arguments lib . | sed > ../default.nix
+	cabal2nix --hpack --extra-arguments lib . > ./default.nix
