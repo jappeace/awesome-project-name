@@ -16,9 +16,9 @@
     };
 
     shellToolOverrides = ghc: super: {
+        inherit (ghc) hpack;
         fswatcher = pkgs.inotify-tools;
         postgresql = pkgs.postgresql;
-        hpack = pkgs.haskellPackages.hpack;
         cabal2nix = pkgs.haskellPackages.cabal2nix;
     };
 })

@@ -27,10 +27,10 @@ library
       src
   build-depends:
       base >= 4.7 && < 5
-    , servant
     , aeson
     , bytestring
     , text
+    , servant
   exposed-modules:
       Common
   other-modules:

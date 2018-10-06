@@ -24,6 +24,7 @@ dependencies:
 - aeson # json
 - bytestring
 - text
+- servant
 
 library:
   source-dirs: src

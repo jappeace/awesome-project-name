@@ -45,7 +45,7 @@ executables:
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:
-    - awesome-project-name
+    - backend
 
 tests:
   awesome-project-name-test:
@@ -56,4 +56,5 @@ tests:
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:
-    - awesome-project-name
+    - backend
+

@@ -26,6 +26,8 @@ dependencies:
 - bytestring
 - text
 - reflex-dom
+- reflex
+- containers
 - common
 
 
@@ -41,7 +43,7 @@ executables:
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:
-    - awesome-project-name
+    - frontend
 
 tests:
   awesome-project-name-test:
@@ -52,4 +54,4 @@ tests:
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:
-    - awesome-project-name
+    - frontend
