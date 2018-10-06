@@ -1,20 +1,24 @@
-let 
-    callPackage = set: f: overrides: f ((builtins.intersectAttrs (builtins.functionArgs f) set) // overrides);
-in
 (import ./reflex-platform { }).project ({ pkgs, ... }: {
     packages = {
         common = ./common;
         backend = ./backend;
         frontend = ./frontend;
     };
-    overrides = self: super: {
-      beam-core = callPackage ./packages/beam-core.nix { };
-      beam-migrate = callPackage ./packages/beam-migrate.nix { };
-      beam-postgres = callPackage ./packages/beam-postgres.nix { };
+    overrides = self: super: rec {
+      beam-core = self.callPackage ./packages/beam-core.nix { };
+      beam-migrate = self.callPackage ./packages/beam-migrate.nix { };
+      beam-postgres = self.callPackage ./packages/beam-postgres.nix { };
     };
 
     shells = {
         ghc = ["common" "backend" "frontend"];
         ghcjs = ["common" "frontend"];
+    };
+
+    shellToolOverrides = ghc: super: {
+        fswatcher = pkgs.inotify-tools;
+        postgresql = pkgs.postgresql;
+        hpack = pkgs.haskellPackages.hpack;
+        cabal2nix = pkgs.haskellPackages.cabal2nix;
     };
 })

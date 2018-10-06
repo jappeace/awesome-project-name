@@ -1,16 +1,15 @@
 {-# LANGUAGE DataKinds #-}
 {-# LANGUAGE TypeOperators #-}
-{-# LANGUAGE DeriveGeneric #-}
 
 module Lib
     ( webAppEntry
     ) where
 
 import Servant
+import Common
+import Data.Aeson(encode, decode)
 import Control.Monad.IO.Class(liftIO)
 import Data.ByteString.Lazy as LBS (writeFile, readFile) 
-import Data.Aeson(ToJSON, FromJSON, encode, decode)
-import GHC.Generics(Generic)
 import Network.Wai(Application)
 import Network.Wai.Handler.Warp(run)
 import           Database.PostgreSQL.Simple   (Connection)
@@ -21,24 +20,6 @@ import qualified Database.Beam                            as Beam
 import qualified Database.Beam.Postgres                            as PgBeam
 import Data.Text(pack, unpack)
 
-type UserAPI = "users" :> Get '[JSON] [User]
-      :<|> "message" :> ReqBody '[JSON] Message :> Post '[JSON] [Message]
-
-data Message = Message {
-  from :: User,
-  content :: String
-} deriving (Eq, Show, Generic)
-
-instance ToJSON Message
-instance FromJSON Message
-
-data User = User
-  { name :: String
-  , email :: String
-  } deriving (Eq, Show, Generic)
-
-instance ToJSON User
-instance FromJSON User
 
 users :: [User]
 users =
@@ -80,9 +61,6 @@ messages conn message = do
 
 server :: Connection -> Server UserAPI
 server conn= (pure users) :<|> (messages conn)
-
-userAPI :: Proxy UserAPI
-userAPI = Proxy
 
 app :: Connection -> Application
 app conn = serve userAPI (server conn)

@@ -1,4 +1,4 @@
-name:                awesome-project-name
+name:                common
 version:             0.1.0.0
 github:              "githubuser/awesome-project-name"
 license:             BSD3
@@ -31,30 +31,6 @@ dependencies:
 - beam-postgres
 - postgresql-simple
 - text
-- common
-
 
 library:
   source-dirs: src
-
-executables:
-  webservice:
-    main:                webservice.hs
-    source-dirs:         app
-    ghc-options:
-    - -threaded
-    - -rtsopts
-    - -with-rtsopts=-N
-    dependencies:
-    - awesome-project-name
-
-tests:
-  awesome-project-name-test:
-    main:                Spec.hs
-    source-dirs:         test
-    ghc-options:
-    - -threaded
-    - -rtsopts
-    - -with-rtsopts=-N
-    dependencies:
-    - awesome-project-name

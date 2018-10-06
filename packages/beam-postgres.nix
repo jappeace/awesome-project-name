@@ -7,7 +7,6 @@
 mkDerivation {
   pname = "beam-postgres";
   version = "0.3.2.0";
-  patches = [ ../patches/beam-postgres-all-schemas.patch ];
   libraryHaskellDepends = [
     aeson base beam-core beam-migrate bytestring case-insensitive
     conduit free hashable haskell-src-exts lifted-base monad-control
