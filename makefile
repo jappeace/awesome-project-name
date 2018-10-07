@@ -11,9 +11,7 @@ build-js:
 	cabal --project-file=cabal-ghcjs.project --builddir=dist-ghcjs new-build all
 
 file-watch:
-	make enter EXTRA="--run \"scripts/watch.sh\""
-file-watch-js:
-	make enter-js EXTRA="--run \"scripts/watch-js.sh\""
+	scripts/watch.sh
 
 update-cabal:
 	hpack ./backend
