@@ -24,6 +24,7 @@ import Servant.API
 import Common
 import Servant.Reflex
 import Data.Proxy
+import Control.Monad(join)
 
 reflex :: IO()
 reflex = do
@@ -41,9 +42,21 @@ reflex = do
     elClass "div" "int-demo" $ do
         intButton  <- button "Get Int"
         serverInts <- fmapMaybe reqSuccess <$> getUsers intButton
+        name <- textInput def
+        email <- textInput def
+        dynText $ _textInput_value email
         display =<< holdDyn ([User "none" "none"]) serverInts
+        sendMsg <- button "Send Message"
+        input <- messageInput 
+        messages <- fmapMaybe reqSuccess <$> postMessage input sendMsg 
+        display =<< holdDyn ([Message (User "none" "none") "ddd"]) messages
 
-  
+        -- postMessage <- fmapMaybe reqSuccess <$> postMessage 
+
+messageInput :: (MonadWidget t m) => m (Dynamic t (Either Text Message))
+messageInput = do
+    message <- textInput def
+    pure $ join $ mapDyn (Right . (Message $ User "none" "none") . unpack) (_textInput_value message)
 
 numberInput :: (MonadWidget t m) => m (Dynamic t (Maybe Double))
 numberInput = do
@@ -52,7 +65,7 @@ numberInput = do
   rec n <- textInput $ def & textInputConfig_inputType .~ "number"
                            & textInputConfig_initialValue .~ "0"
                            & textInputConfig_attributes .~ attrs
-      let result = fmap (readMaybe . unpack) $ _textInput_value n
+      let result = readMaybe . unpack <$> _textInput_value n
           attrs  = fmap (maybe errorState (const validState)) result
   return result
 
