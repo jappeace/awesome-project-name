@@ -1,5 +1,15 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE RecursiveDo       #-}
+{-# LANGUAGE RankNTypes #-}
+{-# LANGUAGE TypeApplications #-}
+{-# OPTIONS_GHC -fprint-explicit-kinds -Wpartial-type-signatures #-}
+
+
+{-# LANGUAGE NoMonomorphismRestriction          #-}
+{-# LANGUAGE OverloadedStrings, PartialTypeSignatures, RecursiveDo #-}
+{-# LANGUAGE ScopedTypeVariables, TypeApplications, TypeFamilies   #-}
+{-# LANGUAGE TypeOperators #-}
+
 module Lib
   ( reflex
   ) where
@@ -13,6 +23,7 @@ import Control.Applicative ((<*>), (<$>))
 import Servant.API
 import Common
 import Servant.Reflex
+import Data.Proxy
 
 reflex :: IO()
 reflex = do
@@ -25,9 +36,14 @@ reflex = do
     let values = zipDynWith (,) nx ny
         result = zipDynWith (\o (x,y) -> runOp o <$> x <*> y) (_dropdown_value d) values
         resultText = fmap (pack . show) result
-    text " = "
+    text " =dad fadf adfdsf "
     dynText resultText
-    text $ pack $ show res
+    elClass "div" "int-demo" $ do
+        intButton  <- button "Get Int"
+        serverInts <- fmapMaybe reqSuccess <$> getUsers intButton
+        display =<< holdDyn ([User "none" "none"]) serverInts
+
+  
 
 numberInput :: (MonadWidget t m) => m (Dynamic t (Maybe Double))
 numberInput = do
@@ -52,6 +68,18 @@ runOp s = case s of
             Times -> (*)
             Divide -> (/)
 
--- getUsers :: ClientM [User]
--- postMessage :: Message -> ClientM [Message]
--- (getUsers :<|> postMessage) = client serviceAPI
+
+-- | The typesignature of this function is ridiculous, let's just ignore it
+apiClients :: forall t m. (MonadWidget t m) => _
+apiClients = client serviceAPI (Proxy @m) (Proxy @()) (constDyn url)
+  where url :: BaseUrl
+        url = BasePath "/"
+
+getUsers :: MonadWidget t m
+          => Event t ()  -- ^ Trigger the XHR Request
+          -> m (Event t (ReqResult () [User])) -- ^ Consume the answer
+postMessage :: MonadWidget t m
+            => Dynamic t (Either Text Message)
+            -> Event t ()
+            -> m (Event t (ReqResult () [Message]))
+(getUsers :<|> postMessage) = apiClients
