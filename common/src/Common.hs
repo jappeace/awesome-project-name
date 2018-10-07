@@ -8,8 +8,10 @@ import GHC.Generics(Generic)
 import Servant.API
 import Data.Proxy
 import Data.Aeson(ToJSON, FromJSON)
-type UserAPI = "api" :> "v0.0" :> "users" :> Get '[JSON] [User]
+type ServiceAPI = "api" :> "v0.0" :> "users" :> Get '[JSON] [User]
       :<|> "api" :> "v0.0" :> "message" :> ReqBody '[JSON] Message :> Post '[JSON] [Message]
+
+type Webservice = ServiceAPI 
       :<|> Raw -- JS entry point
 
 data Message = Message {
@@ -28,5 +30,8 @@ data User = User
 instance ToJSON User
 instance FromJSON User
 
-userAPI :: Proxy UserAPI
-userAPI = Proxy
+serviceAPI :: Proxy ServiceAPI
+serviceAPI = Proxy
+
+webservice :: Proxy Webservice
+webservice = Proxy

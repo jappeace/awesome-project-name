@@ -59,12 +59,12 @@ messages conn message = do
     ) messages
 
 
-server :: Connection -> Server UserAPI
+server :: Connection -> Server Webservice
 server conn=
-  (pure users) :<|> (messages conn) :<|> serveDirectoryFileServer "dist-ghcjs/build/x86_64-linux/ghcjs-0.2.1/frontend-0.1.0.0/c/webservice/build/webservice/webservice.jsexe/"
+  (pure users :<|> messages conn) :<|> serveDirectoryFileServer "dist-ghcjs/build/x86_64-linux/ghcjs-0.2.1/frontend-0.1.0.0/c/webservice/build/webservice/webservice.jsexe/"
 
 app :: Connection -> Application
-app conn = serve userAPI (server conn)
+app conn = serve webservice (server conn)
 
 webAppEntry :: Connection -> IO ()
 webAppEntry conn = do
