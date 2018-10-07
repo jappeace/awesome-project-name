@@ -8,6 +8,7 @@
       beam-core = self.callPackage ./packages/beam-core.nix { };
       beam-migrate = self.callPackage ./packages/beam-migrate.nix { };
       beam-postgres = self.callPackage ./packages/beam-postgres.nix { };
+      servant-reflex = self.callPackage ./packages/servant-reflex.nix { };
     };
 
     shells = {

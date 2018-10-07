@@ -21,9 +21,8 @@ description:         Please see the README on GitHub at <https://github.com/gith
 
 dependencies:
 - base >= 4.7 && < 5
-- servant-client >= 0.11 && < 0.15
 - servant
-- http-client
+- servant-reflex
 - aeson # json
 - bytestring
 - text
@@ -31,7 +30,6 @@ dependencies:
 - reflex
 - containers
 - common
-
 
 library:
   source-dirs: src

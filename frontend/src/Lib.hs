@@ -10,15 +10,12 @@ import qualified Data.Map as Map
 import Data.Text (pack, unpack, Text)
 import Text.Read (readMaybe)
 import Control.Applicative ((<*>), (<$>))
-import Servant.Client
 import Servant.API
 import Common
-import Network.HTTP.Client (newManager, defaultManagerSettings)
+import Servant.Reflex
 
 reflex :: IO()
 reflex = do
-  manager' <- newManager defaultManagerSettings
-  res <- runClientM getUsers (ClientEnv manager' (BaseUrl Http "localhost" 6868 ""))
 
   mainWidget $
     el "div" $ do
@@ -55,6 +52,6 @@ runOp s = case s of
             Times -> (*)
             Divide -> (/)
 
-getUsers :: ClientM [User]
-postMessage :: Message -> ClientM [Message]
-(getUsers :<|> postMessage) = client serviceAPI
+-- getUsers :: ClientM [User]
+-- postMessage :: Message -> ClientM [Message]
+-- (getUsers :<|> postMessage) = client serviceAPI
