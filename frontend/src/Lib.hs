@@ -11,6 +11,7 @@ import Data.Text (pack, unpack, Text)
 import Text.Read (readMaybe)
 import Control.Applicative ((<*>), (<$>))
 
+
 reflex :: IO()
 reflex = mainWidget $ el "div" $ do
   nx <- numberInput
