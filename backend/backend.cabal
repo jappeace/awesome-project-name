@@ -37,8 +37,8 @@ library
     , beam-migrate
     , beam-postgres
     , postgresql-simple
-    , text
     , common
+    , text
   exposed-modules:
       DB
       Lib
@@ -62,8 +62,8 @@ executable webservice
     , beam-migrate
     , beam-postgres
     , postgresql-simple
-    , text
     , common
+    , text
     , backend
   default-language: Haskell2010
 
@@ -84,7 +84,7 @@ test-suite awesome-project-name-test
     , beam-migrate
     , beam-postgres
     , postgresql-simple
-    , text
     , common
+    , text
     , backend
   default-language: Haskell2010

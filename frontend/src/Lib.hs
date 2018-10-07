@@ -10,18 +10,27 @@ import qualified Data.Map as Map
 import Data.Text (pack, unpack, Text)
 import Text.Read (readMaybe)
 import Control.Applicative ((<*>), (<$>))
-
+import Servant.Client
+import Servant.API
+import Common
+import Network.HTTP.Client (newManager, defaultManagerSettings)
 
 reflex :: IO()
-reflex = mainWidget $ el "div" $ do
-  nx <- numberInput
-  d <- dropdown Times (constDyn ops) def
-  ny <- numberInput
-  let values = zipDynWith (,) nx ny
-      result = zipDynWith (\o (x,y) -> runOp o <$> x <*> y) (_dropdown_value d) values
-      resultText = fmap (pack . show) result
-  text " = "
-  dynText resultText
+reflex = do
+  manager' <- newManager defaultManagerSettings
+  res <- runClientM getUsers (ClientEnv manager' (BaseUrl Http "localhost" 6868 ""))
+
+  mainWidget $
+    el "div" $ do
+    nx <- numberInput
+    d <- dropdown Times (constDyn ops) def
+    ny <- numberInput
+    let values = zipDynWith (,) nx ny
+        result = zipDynWith (\o (x,y) -> runOp o <$> x <*> y) (_dropdown_value d) values
+        resultText = fmap (pack . show) result
+    text " = "
+    dynText resultText
+    text $ pack $ show res
 
 numberInput :: (MonadWidget t m) => m (Dynamic t (Maybe Double))
 numberInput = do
@@ -45,3 +54,7 @@ runOp s = case s of
             Minus -> (-)
             Times -> (*)
             Divide -> (/)
+
+getUsers :: ClientM [User]
+postMessage :: Message -> ClientM [Message]
+(getUsers :<|> postMessage) = client serviceAPI

@@ -5,7 +5,7 @@ drop-db:
 create-db: drop-db
 	createdb $(DB_NAME)
 
-build:
+build: update-cabal
 	cabal new-build all
 build-js:
 	cabal --project-file=cabal-ghcjs.project --builddir=dist-ghcjs new-build all
@@ -26,5 +26,5 @@ enter:
 enter-js:
 	nix-shell -A shells.ghcjs --pure $(EXTRA)
 
-run-js:
-	firefox ./dist-ghcjs/build/x86_64-linux/ghcjs-0.2.1/frontend-0.1.0.0/c/webservice/build/webservice/webservice.jsexe/index.html
+run:
+	./dist-newstyle/build/x86_64-linux/ghc-8.0.2/backend-0.1.0.0/c/webservice/build/webservice/webservice

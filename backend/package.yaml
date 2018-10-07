@@ -30,8 +30,8 @@ dependencies:
 - beam-migrate
 - beam-postgres
 - postgresql-simple
-- text
 - common
+- text
 
 library:
   source-dirs: src

@@ -17,6 +17,7 @@ cabal-version:       >= 1.10
 
 extra-source-files:
   ChangeLog.md
+  README.md
 
 source-repository head
   type: git
@@ -27,7 +28,9 @@ library
     src
   build-depends:
     base >= 4.7 && < 5,
-    servant-client,
+    servant-client >= 0.11 && < 0.15,
+    servant,
+    http-client,
     aeson,
     bytestring,
     text,
@@ -48,7 +51,9 @@ executable webservice
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
     base >= 4.7 && < 5,
-    servant-client,
+    servant-client >= 0.11 && < 0.15,
+    servant,
+    http-client,
     aeson,
     bytestring,
     text,
@@ -67,7 +72,9 @@ test-suite awesome-project-name-test
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
     base >= 4.7 && < 5,
-    servant-client,
+    servant-client >= 0.11 && < 0.15,
+    servant,
+    http-client,
     aeson,
     bytestring,
     text,
