@@ -9,8 +9,8 @@ import Servant.API
 import Data.Proxy
 import Data.Aeson(ToJSON, FromJSON)
 
-type ServiceAPI = "api" :> "v0.0" :> "users" :> Get '[JSON] [User]
-      :<|> "api" :> "v0.0" :> "message" :> ReqBody '[JSON] Message :> Post '[JSON] [Message]
+type ServiceAPI = "api" :> "1.0" :> "users" :> Get '[JSON] [User]
+      :<|> "api" :> "1.0" :> "message" :> ReqBody '[JSON] Message :> Post '[JSON] [Message]
 
 data Message = Message {
   from :: User,

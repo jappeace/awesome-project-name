@@ -1,10 +1,10 @@
 name:                common
-version:             0.1.0.0
-github:              "githubuser/awesome-project-name"
-license:             BSD3
-author:              "Author name here"
-maintainer:          "example@example.com"
-copyright:           "2018 Author name here"
+version:             1.0.0.0
+github:              "jappeace/awesome-project-name"
+license:             MIT
+author:              "Jappie Klooster"
+maintainer:          "jappieklooster@hotmail.com"
+copyright:           "2018 Jappie Klooster"
 
 extra-source-files:
 - README.md
