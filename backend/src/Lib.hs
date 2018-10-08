@@ -1,15 +1,16 @@
 {-# LANGUAGE DataKinds #-}
 {-# LANGUAGE TypeOperators #-}
 
+{-# OPTIONS_GHC -Wno-missing-monadfail-instances #-}
+
+
 module Lib
     ( webAppEntry
     ) where
 
 import Servant
 import Common
-import Data.Aeson(encode, decode)
 import Control.Monad.IO.Class(liftIO)
-import Data.ByteString.Lazy as LBS (writeFile, readFile) 
 import Network.Wai(Application)
 import Network.Wai.Handler.Warp(run)
 import           Database.PostgreSQL.Simple   (Connection)
@@ -20,6 +21,11 @@ import qualified Database.Beam                            as Beam
 import qualified Database.Beam.Postgres                            as PgBeam
 import Data.Text(pack, unpack)
 
+type Webservice = ServiceAPI 
+      :<|> Raw -- JS entry point
+
+webservice :: Proxy Webservice
+webservice = Proxy
 
 users :: [User]
 users =
@@ -29,10 +35,10 @@ users =
 
 messages :: Connection -> Message -> Handler [Message]
 messages conn message = do 
-  messages <- liftIO $ 
+  fromDb <- liftIO $ 
     PgBeam.runBeamPostgres conn $ do
       let user = from message
-      [user] <- runInsertReturningList (DB._ausers DB.awesomeDB) $ 
+      [foundUser] <- runInsertReturningList (DB._ausers DB.awesomeDB) $ 
           Beam.insertExpressions [DB.User 
             Beam.default_
             (Beam.val_ (pack $ name $ user ))
@@ -42,7 +48,7 @@ messages conn message = do
           Beam.insertExpressions 
             [DB.Message 
               Beam.default_ 
-              (Beam.val_ (Beam.pk user))
+              (Beam.val_ (Beam.pk foundUser))
               (Beam.val_ (pack $ content message))
             ]
       Beam.runSelectReturningList $ Beam.select $ do 
@@ -56,7 +62,7 @@ messages conn message = do
           (unpack $ DB._name usr)
           (unpack $ DB._email usr))
         (unpack $ DB._content msg)
-    ) messages
+    ) fromDb
 
 
 server :: Connection -> Server Webservice
@@ -67,5 +73,5 @@ app :: Connection -> Application
 app conn = serve webservice (server conn)
 
 webAppEntry :: Connection -> IO ()
-webAppEntry conn = do
-  run 6868 (app conn)
+webAppEntry conn = run 6868 (app conn)
+
