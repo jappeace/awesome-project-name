@@ -1,14 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE RecursiveDo       #-}
-{-# LANGUAGE RankNTypes #-}
-{-# LANGUAGE TypeApplications #-}
 {-# OPTIONS_GHC -fprint-explicit-kinds -Wpartial-type-signatures #-}
 
-
-{-# LANGUAGE NoMonomorphismRestriction          #-}
-{-# LANGUAGE OverloadedStrings, PartialTypeSignatures, RecursiveDo #-}
-{-# LANGUAGE ScopedTypeVariables, TypeApplications, TypeFamilies   #-}
-{-# LANGUAGE TypeOperators #-}
 
 module Lib
   ( reflex
@@ -17,14 +9,15 @@ import Reflex
 import Reflex.Dom
 import Data.Map (Map)
 import qualified Data.Map as Map
-import Data.Text (pack, unpack, Text)
+import qualified Data.Text as Text
 import Text.Read (readMaybe)
 import Control.Applicative ((<*>), (<$>))
-import Servant.API
 import Common
 import Servant.Reflex
 import Data.Proxy
 import Control.Monad(join)
+import Data.Monoid((<>)) -- sauron
+import ServantClient
 
 reflex :: IO()
 reflex = do
@@ -37,27 +30,32 @@ reflex = do
         email <- textInput def
         dynText $ _textInput_value email
         display =<< holdDyn ([User "none" "none"]) serverInts
-        sendMsg <- button "Send Message"
         input <- messageInput 
-        messages <- fmapMaybe reqSuccess <$> postMessage input sendMsg 
-        display =<< holdDyn ([Message (User "none" "none") "ddd"]) messages
+        sendMsg <- button "Send Message"
+        messages <- fmapMaybe reqSuccess <$> postMessage (Right <$> input) sendMsg 
+        resulting <- holdDyn ([Message (User "none" "none") "ddd"]) messages
+        el "div" $
+            simpleList resulting fancyMsg 
+        pure ()
+  where
+    fancyMsg :: (MonadWidget t m) => Dynamic t Message -> m (Element EventResult GhcjsDomSpace t)
+    fancyMsg msg = elClass "div" "message" $ do
+        elDynHtml' "h1" $ Text.pack . name . from <$> msg
+        elDynHtml' "span" $ Text.pack . content <$> msg
 
-messageInput :: (MonadWidget t m) => m (Dynamic t (Either Text Message))
+messageInput :: (MonadWidget t m) => m (Dynamic t Message)
 messageInput = do
-    message <- textInput def
-    pure $ join $ mapDyn (Right . (Message $ User "none" "none") . unpack) (_textInput_value message)
+    user <- userInput
+    message <- labeledInput "message"
+    pure $ (Message <$> user) <*> (Text.unpack <$> _textInput_value message)
 
--- | The typesignature of this function is ridiculous, let's just ignore it
-apiClients :: forall t m. (MonadWidget t m) => _
-apiClients = client serviceAPI (Proxy @m) (Proxy @()) (constDyn url)
-  where url :: BaseUrl
-        url = BasePath "/"
+userInput :: (MonadWidget t m) => m (Dynamic t User)
+userInput = do
+        username <- labeledInput "username"
+        email <- labeledInput "email"
+        pure $ User . Text.unpack <$> _textInput_value username <*> (Text.unpack <$> _textInput_value email)
 
-getUsers :: MonadWidget t m
-          => Event t ()  -- ^ Trigger the XHR Request
-          -> m (Event t (ReqResult () [User])) -- ^ Consume the answer
-postMessage :: MonadWidget t m
-            => Dynamic t (Either Text Message)
-            -> Event t ()
-            -> m (Event t (ReqResult () [Message]))
-(getUsers :<|> postMessage) = apiClients
+labeledInput :: (MonadWidget t m) => Text.Text -> m (TextInput t)
+labeledInput label = elClass "div" "field" $ do
+    elClass "label" "label" $ text label
+    elClass "div" "control" $ textInput (def & textInputConfig_attributes .~ constDyn (Text.pack "class" =: Text.pack "input"))

@@ -7,8 +7,10 @@ create-db: drop-db
 
 build: update-cabal
 	cabal new-build all
+OUTJS="dist-ghcjs/build/x86_64-linux/ghcjs-0.2.1/frontend-0.1.0.0/c/webservice/build/webservice/webservice.jsexe"
 build-js:
 	cabal --project-file=cabal-ghcjs.project --builddir=dist-ghcjs new-build all
+	echo "don't forget to minify" # closure-compiler --compilation_level ADVANCED --js=$(OUTJS)'all.js' > $(OUTJS)all.min.js
 
 file-watch:
 	scripts/watch.sh

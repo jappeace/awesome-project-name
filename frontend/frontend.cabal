@@ -39,6 +39,7 @@ library
     common
   exposed-modules:
     Lib
+    ServantClient
   other-modules:
     Paths_frontend
   default-language: Haskell2010

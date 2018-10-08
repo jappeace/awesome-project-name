@@ -21,5 +21,7 @@
         fswatcher = pkgs.inotify-tools;
         postgresql = pkgs.postgresql;
         cabal2nix = pkgs.haskellPackages.cabal2nix;
+        ccjs = pkgs.closurecompiler;
+        vim = pkgs.vim;
     };
 })
