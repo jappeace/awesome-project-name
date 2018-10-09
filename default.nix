@@ -1,4 +1,9 @@
-(import ./reflex-platform { }).project ({ pkgs, ... }: {
+let reflex-platform = builtins.fetchGit {
+      url = https://github.com/reflex-frp/reflex-platform.git;
+      ref = "develop";
+      rev = "a700776dd17a2a2cf3571f35920d3d57730c3ad6";
+    };
+in (import reflex-platform { }).project ({ pkgs, ... }: {
     packages = {
         common = ./common;
         backend = ./backend;
