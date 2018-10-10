@@ -21,7 +21,7 @@ import qualified Database.Beam                            as Beam
 import qualified Database.Beam.Postgres                            as PgBeam
 import Data.Text(pack, unpack)
 
-type Webservice = ServiceAPI 
+type Webservice = ServiceAPI
       :<|> Raw -- JS entry point
 
 webservice :: Proxy Webservice
@@ -34,24 +34,24 @@ users =
   ]
 
 messages :: Connection -> Message -> Handler [Message]
-messages conn message = do 
-  fromDb <- liftIO $ 
+messages conn message = do
+  fromDb <- liftIO $
     PgBeam.runBeamPostgres conn $ do
       let user = from message
-      [foundUser] <- runInsertReturningList (DB._ausers DB.awesomeDB) $ 
-          Beam.insertExpressions [DB.User 
+      [foundUser] <- runInsertReturningList (DB._ausers DB.awesomeDB) $
+          Beam.insertExpressions [DB.User
             Beam.default_
             (Beam.val_ (pack $ name $ user ))
             (Beam.val_ (pack $ email $ user ))
         ]
-      _ <- runInsertReturningList (DB._messages DB.awesomeDB) $ 
-          Beam.insertExpressions 
-            [DB.Message 
-              Beam.default_ 
+      _ <- runInsertReturningList (DB._messages DB.awesomeDB) $
+          Beam.insertExpressions
+            [DB.Message
+              Beam.default_
               (Beam.val_ (Beam.pk foundUser))
               (Beam.val_ (pack $ content message))
             ]
-      Beam.runSelectReturningList $ Beam.select $ do 
+      Beam.runSelectReturningList $ Beam.select $ do
         usr <- (Beam.all_ (DB._ausers DB.awesomeDB))
         msg <- Beam.oneToMany_ (DB._messages DB.awesomeDB) DB._from usr
         pure (msg, usr)
@@ -65,13 +65,13 @@ messages conn message = do
     ) fromDb
 
 
-server :: Connection -> Server Webservice
-server conn=
-  (pure users :<|> messages conn) :<|> serveDirectoryFileServer "dist-ghcjs/build/x86_64-linux/ghcjs-0.2.1/frontend-0.1.0.0/c/webservice/build/webservice/webservice.jsexe/"
+server :: Connection -> FilePath -> Server Webservice
+server conn staticFolder =
+  (pure users :<|> messages conn) :<|> serveDirectoryFileServer staticFolder
 
-app :: Connection -> Application
-app conn = serve webservice (server conn)
+app :: Connection -> FilePath -> Application
+app conn staticFolder = serve webservice (server conn staticFolder)
 
-webAppEntry :: Connection -> IO ()
-webAppEntry conn = run 6868 (app conn)
+webAppEntry :: Connection -> FilePath -> IO ()
+webAppEntry conn staticFolder = run 6868 (app conn staticFolder)
 
