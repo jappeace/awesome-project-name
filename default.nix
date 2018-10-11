@@ -14,6 +14,8 @@ in (import reflex-platform { }).project ({ pkgs, ... }: {
       beam-migrate = self.callPackage ./packages/beam-migrate.nix { };
       beam-postgres = self.callPackage ./packages/beam-postgres.nix { };
       servant-reflex = self.callPackage ./packages/servant-reflex.nix { };
+      frontend = pkgs.haskell.lib.dontHaddock super.frontend;
+      common = pkgs.haskell.lib.dontHaddock super.common;
       backend = pkgs.haskell.lib.overrideCabal super.backend (drv: { enableSharedExecutables = false; });
     };
 
