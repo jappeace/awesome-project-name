@@ -1,6 +1,10 @@
--- This file has been generated from package.yaml by hpack version 0.18.1.
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.31.0.
 --
 -- see: https://github.com/sol/hpack
+--
+-- hash: df940f9cb4db01b68e09c78a9392da9c22646b3fa5f1549b2d21d45cfc6843d5
 
 name:           backend
 version:        1.0.0.0
@@ -13,11 +17,9 @@ copyright:      2018 Jappie Klooster
 license:        MIT
 license-file:   LICENSE
 build-type:     Simple
-cabal-version:  >= 1.10
-
 extra-source-files:
-    ChangeLog.md
     README.md
+    ChangeLog.md
 
 source-repository head
   type: git
@@ -28,18 +30,18 @@ library
       src
   ghc-options: -Werror -Wall -Wcompat -Wincomplete-uni-patterns -Widentities
   build-depends:
-      base >= 4.7 && < 5
-    , servant-server
-    , aeson
-    , wai
-    , warp
-    , bytestring
+      aeson
+    , base >=4.7 && <5
     , beam-core
     , beam-migrate
     , beam-postgres
-    , postgresql-simple
+    , bytestring
     , common
+    , postgresql-simple
+    , servant-server
     , text
+    , wai
+    , warp
   exposed-modules:
       DB
       Lib
@@ -49,43 +51,47 @@ library
 
 executable webservice
   main-is: webservice.hs
+  other-modules:
+      Paths_backend
   hs-source-dirs:
       app
   ghc-options: -Werror -Wall -Wcompat -Wincomplete-uni-patterns -Widentities -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      base >= 4.7 && < 5
-    , servant-server
-    , aeson
-    , wai
-    , warp
-    , bytestring
+      aeson
+    , backend
+    , base >=4.7 && <5
     , beam-core
     , beam-migrate
     , beam-postgres
-    , postgresql-simple
+    , bytestring
     , common
+    , postgresql-simple
+    , servant-server
     , text
-    , backend
+    , wai
+    , warp
   default-language: Haskell2010
 
 test-suite awesome-project-name-test
   type: exitcode-stdio-1.0
   main-is: Spec.hs
+  other-modules:
+      Paths_backend
   hs-source-dirs:
       test
   ghc-options: -Werror -Wall -Wcompat -Wincomplete-uni-patterns -Widentities -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      base >= 4.7 && < 5
-    , servant-server
-    , aeson
-    , wai
-    , warp
-    , bytestring
+      aeson
+    , backend
+    , base >=4.7 && <5
     , beam-core
     , beam-migrate
     , beam-postgres
-    , postgresql-simple
+    , bytestring
     , common
+    , postgresql-simple
+    , servant-server
     , text
-    , backend
+    , wai
+    , warp
   default-language: Haskell2010

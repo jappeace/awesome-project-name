@@ -1,6 +1,10 @@
--- This file has been generated from package.yaml by hpack version 0.18.1.
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.31.0.
 --
 -- see: https://github.com/sol/hpack
+--
+-- hash: a42be263fa552575fc011c905a22ef338e7e15a7bba53be668292138482e894f
 
 name:           common
 version:        1.0.0.0
@@ -13,11 +17,9 @@ copyright:      2018 Jappie Klooster
 license:        MIT
 license-file:   LICENSE
 build-type:     Simple
-cabal-version:  >= 1.10
-
 extra-source-files:
-    ChangeLog.md
     README.md
+    ChangeLog.md
 
 source-repository head
   type: git
@@ -29,10 +31,10 @@ library
   ghc-options: -Werror -Wall -Wcompat -Wincomplete-uni-patterns -Widentities
   ghcjs-options: -dedupe
   build-depends:
-      base >= 4.7 && < 5
-    , aeson
-    , text
+      aeson
+    , base >=4.7 && <5
     , servant
+    , text
   exposed-modules:
       Common
   other-modules:

@@ -1,6 +1,10 @@
--- This file has been generated from package.yaml by hpack version 0.18.1.
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.31.0.
 --
 -- see: https://github.com/sol/hpack
+--
+-- hash: a95d42bd1b88a1bbee3bb8e365d50a989fa5a8c028ef4807a402a074f96bd4e8
 
 name:                frontend
 version:             1.0.0.0
@@ -13,11 +17,9 @@ author:              Jappie Klooster
 maintainer:          jappieklooster@hotmail.com
 copyright:           2018 Jappie Klooster
 build-type:          Simple
-cabal-version:       >= 1.10
-
 extra-source-files:
-  ChangeLog.md
   README.md
+  ChangeLog.md
 
 source-repository head
   type: git
@@ -30,15 +32,15 @@ library
   ghcjs-options: -dedupe
   cpp-options: -DGHCJS_BROWSER
   build-depends:
-    base >= 4.7 && < 5,
+    aeson,
+    base >=4.7 && <5,
+    common,
+    containers,
+    reflex,
+    reflex-dom,
     servant,
     servant-reflex,
-    aeson,
-    text,
-    reflex-dom,
-    reflex,
-    containers,
-    common
+    text
   exposed-modules:
     Lib
     ServantClient
@@ -48,41 +50,45 @@ library
 
 executable webservice
   main-is: frontend.hs
+  other-modules:
+    Paths_frontend
   hs-source-dirs:
     app
   ghc-options: -Werror -Wall -Wcompat -Wincomplete-uni-patterns -Widentities -threaded -rtsopts -with-rtsopts=-N
   ghcjs-options: -dedupe
   cpp-options: -DGHCJS_BROWSER
   build-depends:
-    base >= 4.7 && < 5,
+    aeson,
+    base >=4.7 && <5,
+    common,
+    containers,
+    frontend,
+    reflex,
+    reflex-dom,
     servant,
     servant-reflex,
-    aeson,
-    text,
-    reflex-dom,
-    reflex,
-    containers,
-    common,
-    frontend
+    text
   default-language: Haskell2010
 
 test-suite awesome-project-name-test
   type: exitcode-stdio-1.0
   main-is: Spec.hs
+  other-modules:
+    Paths_frontend
   hs-source-dirs:
     test
   ghc-options: -Werror -Wall -Wcompat -Wincomplete-uni-patterns -Widentities -threaded -rtsopts -with-rtsopts=-N
   ghcjs-options: -dedupe
   cpp-options: -DGHCJS_BROWSER
   build-depends:
-    base >= 4.7 && < 5,
+    aeson,
+    base >=4.7 && <5,
+    common,
+    containers,
+    frontend,
+    reflex,
+    reflex-dom,
     servant,
     servant-reflex,
-    aeson,
-    text,
-    reflex-dom,
-    reflex,
-    containers,
-    common,
-    frontend
+    text
   default-language: Haskell2010

@@ -1,7 +1,7 @@
 let reflex-platform = builtins.fetchGit {
       url = https://github.com/reflex-frp/reflex-platform.git;
       ref = "develop";
-      rev = "a700776dd17a2a2cf3571f35920d3d57730c3ad6";
+      rev = "cb5c820d66ca89c114792966c361cb6e0152ce92";
     };
 in (import reflex-platform { }).project ({ pkgs, ... }: {
     packages = {

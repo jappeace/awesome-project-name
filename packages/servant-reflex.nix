@@ -8,9 +8,9 @@ mkDerivation {
   pname = "servant-reflex";
   version = "0.3.3";
   src = fetchgit {
-    url = "https://github.com/imalsogreg/servant-reflex";
-    sha256 = "1cfhs5fvg298j0a3m0kjbspidmggdwbgws03krag9xp7fv736j6x";
-    rev = "cc2d9b1f4f0c81bd98a7cb5313c5d2c802d5a50b";
+    url = "https://github.com/jappeace/servant-reflex";
+    sha256 = "0ywg5pr8mkb0hwpznhcf7s3gqyvi2wvwkibw3mwnaw4ls06j4xmy";
+    rev = "34362d2d51010af0326c8583da6f4ee64a7e08fe";
   };
   isLibrary = true;
   isExecutable = true;
@@ -23,3 +23,4 @@ mkDerivation {
   description = "Servant reflex API generator";
   license = stdenv.lib.licenses.bsd3;
 }
+
