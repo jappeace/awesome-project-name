@@ -27,6 +27,8 @@ library
   hs-source-dirs:
     src
   ghc-options: -Werror -Wall -Wcompat -Wincomplete-uni-patterns -Widentities
+  if impl(ghcjs -any)
+    ghc-options:       -dedupe
   build-depends:
     base >= 4.7 && < 5,
     servant,
@@ -49,6 +51,9 @@ executable webservice
   hs-source-dirs:
     app
   ghc-options: -Werror -Wall -Wcompat -Wincomplete-uni-patterns -Widentities -threaded -rtsopts -with-rtsopts=-N
+  if impl(ghcjs -any)
+    ghc-options:       -dedupe
+    cpp-options:       -DGHCJS_BROWSER
   build-depends:
     base >= 4.7 && < 5,
     servant,
