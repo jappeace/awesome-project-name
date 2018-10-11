@@ -1,13 +1,15 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE RankNTypes #-}
 {-# LANGUAGE TypeApplications #-}
-{-# OPTIONS_GHC -Wno-partial-type-signatures #-}
+{-# LANGUAGE AllowAmbiguousTypes #-}
 
 {-# LANGUAGE NoMonomorphismRestriction          #-}
 {-# LANGUAGE PartialTypeSignatures #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE  TypeApplications #-}
 {-# LANGUAGE TypeOperators #-}
+
+{-# OPTIONS_GHC  -Wno-simplifiable-class-constraints -Wno-partial-type-signatures #-}
 
 -- | This modules purpose is just to generate the xhr clients.
 --   there is some type magick going on generating these,
