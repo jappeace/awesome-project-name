@@ -28,7 +28,7 @@ enter-js:
 	nix-shell -A shells.ghcjs --pure $(EXTRA)
 
 run:
-	./dist-newstyle/build/x86_64-linux/ghc-8.0.2/backend-0.1.0.0/c/webservice/build/webservice/webservice
+	./dist-newstyle/build/x86_64-linux/ghc-8.0.2/backend-1.0.0.0/c/webservice/build/webservice/webservice
 
 clean:
 	rm -fR dist dist-*

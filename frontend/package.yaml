@@ -20,6 +20,8 @@ extra-source-files:
 description:         Please see the README on GitHub at <https://github.com/githubuser/awesome-project-name#readme>
 
 ghc-options: -Werror -Wall -Wcompat -Wincomplete-uni-patterns -Widentities
+ghcjs-options: -dedupe
+cpp-options: -DGHCJS_BROWSER
 
 dependencies:
 - base >= 4.7 && < 5

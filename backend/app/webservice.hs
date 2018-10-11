@@ -9,7 +9,7 @@ import System.Environment
 
 defaultStaticFolder :: FilePath
 defaultStaticFolder
-  = "dist-ghcjs/build/x86_64-linux/ghcjs-0.2.1/frontend-0.1.0.0/c/webservice/build/webservice/webservice.jsexe/"
+  = "dist-ghcjs/build/x86_64-linux/ghcjs-0.2.1/frontend-1.0.0.0/c/webservice/build/webservice/webservice.jsexe/"
 
 main :: IO ()
 main = do
