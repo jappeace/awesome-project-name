@@ -3,7 +3,7 @@ let reflex-platform = builtins.fetchGit {
       ref = "develop";
       rev = "cb5c820d66ca89c114792966c361cb6e0152ce92";
     };
-in (import reflex-platform { }).project ({ pkgs, ... }: {
+in (import reflex-platform { }).project ({ pkgs, ghc8_4, ... }: {
     packages = {
         common = ./common;
         backend = ./backend;
@@ -14,7 +14,7 @@ in (import reflex-platform { }).project ({ pkgs, ... }: {
       beam-migrate = self.callPackage ./packages/beam-migrate.nix { };
       beam-postgres = self.callPackage ./packages/beam-postgres.nix { };
       servant-reflex = self.callPackage ./packages/servant-reflex.nix { };
-      Glob = self.callPackage ./packages/glob.nix { }; # ghc8_4 glob tests for 0.9.2 failed, delete on upgrade
+      # Glob = self.callPackage ./packages/glob.nix { }; # ghc8_4 glob tests for 0.9.2 failed, delete on upgrade
       backend = pkgs.haskell.lib.overrideCabal super.backend (drv: { enableSharedExecutables = false; });
     };
 
@@ -24,10 +24,6 @@ in (import reflex-platform { }).project ({ pkgs, ... }: {
     };
 
     shellToolOverrides = ghc: super: {
-        inherit (ghc) hpack;
-        fswatcher = pkgs.inotify-tools;
-        postgresql = pkgs.postgresql;
-        cabal2nix = pkgs.haskellPackages.cabal2nix;
         ccjs = pkgs.closurecompiler;
         vim = pkgs.vim;
     };
