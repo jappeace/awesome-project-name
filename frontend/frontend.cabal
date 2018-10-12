@@ -1,25 +1,24 @@
-cabal-version: 1.12
-
--- This file has been generated from package.yaml by hpack version 0.31.0.
+-- This file has been generated from package.yaml by hpack version 0.28.2.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: a5162da19c1b2f26698e2b4807908cc9b31b478dd2c88a1dfafe24b742baafb8
+-- hash: 51553ffd8b7389fccb97c91859e1459343fd269166f628c57cd4c2e96238c247
 
-name:                frontend
-version:             1.0.0.0
-description:         Please see the README on GitHub at <https://github.com/githubuser/awesome-project-name#readme>
-homepage:            https://github.com/jappeace/awesome-project-name#readme
-bug-reports:         https://github.com/jappeace/awesome-project-name/issues
-license:             MIT
-license-file:        LICENSE
-author:              Jappie Klooster
-maintainer:          jappieklooster@hotmail.com
-copyright:           2018 Jappie Klooster
-build-type:          Simple
+cabal-version:  >= 1.10
+name:           frontend
+version:        1.0.0.0
+description:    Please see the README on GitHub at <https://github.com/githubuser/awesome-project-name#readme>
+homepage:       https://github.com/jappeace/awesome-project-name#readme
+bug-reports:    https://github.com/jappeace/awesome-project-name/issues
+license:        MIT
+license-file:   LICENSE
+author:         Jappie Klooster
+maintainer:     jappieklooster@hotmail.com
+copyright:      2018 Jappie Klooster
+build-type:     Simple
 extra-source-files:
-  README.md
   ChangeLog.md
+  README.md
 
 source-repository head
   type: git

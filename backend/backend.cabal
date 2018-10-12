@@ -1,11 +1,10 @@
-cabal-version: 1.12
-
--- This file has been generated from package.yaml by hpack version 0.31.0.
+-- This file has been generated from package.yaml by hpack version 0.28.2.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: df940f9cb4db01b68e09c78a9392da9c22646b3fa5f1549b2d21d45cfc6843d5
+-- hash: 15333e3c69c7a12e916a57d02923754bcc16ef70247536a67ab6318b95d0134d
 
+cabal-version:  >= 1.10
 name:           backend
 version:        1.0.0.0
 description:    Please see the README on GitHub at <https://github.com/githubuser/awesome-project-name#readme>
@@ -18,8 +17,8 @@ license:        MIT
 license-file:   LICENSE
 build-type:     Simple
 extra-source-files:
-    README.md
     ChangeLog.md
+    README.md
 
 source-repository head
   type: git
