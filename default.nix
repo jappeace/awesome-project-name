@@ -3,7 +3,7 @@ let reflex-platform = builtins.fetchGit {
       ref = "develop";
       rev = "cb5c820d66ca89c114792966c361cb6e0152ce92";
     };
-in (import reflex-platform { }).project ({ pkgs, ghc8_4, ... }: {
+in (import reflex-platform { }).project ({ pkgs, ... }: {
     packages = {
         common = ./common;
         backend = ./backend;
