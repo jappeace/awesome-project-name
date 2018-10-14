@@ -16,6 +16,8 @@ in (import reflex-platform { }).project ({ pkgs, ... }: {
       servant-reflex = self.callPackage ./packages/servant-reflex.nix { };
       # Glob = self.callPackage ./packages/glob.nix { }; # ghc8_4 glob tests for 0.9.2 failed, delete on upgrade
       backend = pkgs.haskell.lib.overrideCabal super.backend (drv: { enableSharedExecutables = false; });
+      common = pkgs.haskell.lib.overrideCabal super.common (drv: { libraryToolDepends = []; });
+      frontend = pkgs.haskell.lib.overrideCabal super.frontend (drv: { libraryToolDepends = []; });
     };
 
     shells = {
@@ -28,5 +30,6 @@ in (import reflex-platform { }).project ({ pkgs, ... }: {
         vim = pkgs.vim;
     };
 })
+
 
 
