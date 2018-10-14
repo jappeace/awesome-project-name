@@ -2,7 +2,7 @@
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 15333e3c69c7a12e916a57d02923754bcc16ef70247536a67ab6318b95d0134d
+-- hash: 3379075613ecac2eaf0873fcfd086d8f08043f2def1589fb710fad57f0459680
 
 cabal-version:  >= 1.10
 name:           backend
@@ -29,13 +29,8 @@ library
       src
   ghc-options: -Werror -Wall -Wcompat -Wincomplete-uni-patterns -Widentities
   build-depends:
-      base >= 4.7 && < 5
-    , servant-server
-    , aeson
-    , wai
-    , wai-extra
-    , warp
-    , bytestring
+      aeson
+    , base >=4.7 && <5
     , beam-core
     , beam-migrate
     , beam-postgres
@@ -45,6 +40,7 @@ library
     , servant-server
     , text
     , wai
+    , wai-extra
     , warp
   exposed-modules:
       DB
@@ -73,6 +69,7 @@ executable webservice
     , servant-server
     , text
     , wai
+    , wai-extra
     , warp
   default-language: Haskell2010
 
@@ -97,5 +94,6 @@ test-suite awesome-project-name-test
     , servant-server
     , text
     , wai
+    , wai-extra
     , warp
   default-language: Haskell2010

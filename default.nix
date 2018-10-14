@@ -32,4 +32,3 @@ in (import reflex-platform { }).project ({ pkgs, ... }: {
         vim = pkgs.vim;
     };
 })
-
