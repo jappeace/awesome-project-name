@@ -29,8 +29,13 @@ library
       src
   ghc-options: -Werror -Wall -Wcompat -Wincomplete-uni-patterns -Widentities
   build-depends:
-      aeson
-    , base >=4.7 && <5
+      base >= 4.7 && < 5
+    , servant-server
+    , aeson
+    , wai
+    , wai-extra
+    , warp
+    , bytestring
     , beam-core
     , beam-migrate
     , beam-postgres

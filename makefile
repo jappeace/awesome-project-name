@@ -23,9 +23,9 @@ update-cabal:
 
 EXTRA=""
 enter:
-	nix-shell -A shells.ghc --pure $(EXTRA)
+	nix-shell --cores 0 -j 8 -A shells.ghc --pure $(EXTRA)
 enter-js:
-	nix-shell -A shells.ghcjs --pure $(EXTRA)
+	nix-shell --cores 0 -j 8 -A shells.ghcjs --pure $(EXTRA)
 
 run:
 	./dist-newstyle/build/x86_64-linux/ghc-8.0.2/backend-1.0.0.0/c/webservice/build/webservice/webservice

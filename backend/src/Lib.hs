@@ -13,6 +13,9 @@ import Common
 import Control.Monad.IO.Class(liftIO)
 import Network.Wai(Application)
 import Network.Wai.Handler.Warp(run)
+import qualified Network.Wai as Wai
+import qualified Network.Wai.Middleware.Gzip as Wai
+
 import           Database.PostgreSQL.Simple   (Connection)
 import qualified DB as DB
 import           Database.Beam.Backend.SQL.BeamExtensions (runInsertReturningList)
@@ -73,5 +76,7 @@ app :: Connection -> FilePath -> Application
 app conn staticFolder = serve webservice (server conn staticFolder)
 
 webAppEntry :: Connection -> FilePath -> IO ()
-webAppEntry conn staticFolder = run 6868 (app conn staticFolder)
+webAppEntry conn staticFolder = run 6868 $ compress $ app conn staticFolder
 
+compress :: Wai.Middleware
+compress = Wai.gzip Wai.def { Wai.gzipFiles = Wai.GzipCompress }
