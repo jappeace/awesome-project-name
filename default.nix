@@ -15,9 +15,9 @@ in (import reflex-platform { }).project ({ pkgs, ... }: {
       beam-postgres = self.callPackage ./packages/beam-postgres.nix { };
       servant-reflex = self.callPackage ./packages/servant-reflex.nix { };
       # Glob = self.callPackage ./packages/glob.nix { }; # ghc8_4 glob tests for 0.9.2 failed, delete on upgrade
-    servant = pkgs.haskell.lib.overrideCabal super.servant (drv: {
-        testHaskellDepends = drv.testHaskellDepends ++ [(self.callPackage ./packages/doctest.nix { }) ];
-      });
+      servant = pkgs.haskell.lib.dontCheck (pkgs.haskell.lib.overrideCabal super.servant (drv: {
+        testHaskellDepends = []; # servant has a dependency on testdoc 0.16.0 which fails to build in nix
+      }));
       backend = pkgs.haskell.lib.overrideCabal super.backend (drv: { enableSharedExecutables = false; });
       common = pkgs.haskell.lib.overrideCabal super.common (drv: { libraryToolDepends = []; });
       frontend = pkgs.haskell.lib.overrideCabal super.frontend (drv: { libraryToolDepends = []; });
