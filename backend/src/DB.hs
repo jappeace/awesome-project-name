@@ -11,6 +11,8 @@ module DB where
 import qualified Data.ByteString                as BS
 import qualified Data.Text                      as Text
 import           Database.Beam
+import           Database.Beam.Postgres(Postgres, PgCommandSyntax)
+import           Database.Beam.Migrate
 
 
 data UserT f = User
@@ -56,10 +58,10 @@ data AwesomeDb f = AwesomeDb
                       , _messages :: f (TableEntity MessageT) }
                         deriving Generic
 
-connectionString :: BS.ByteString
-connectionString = "dbname=awesome_db"
+instance Database Postgres AwesomeDb
 
-instance Database be AwesomeDb
+awesomeDB :: DatabaseSettings Postgres AwesomeDb
+awesomeDB = unCheckDatabase defaultMigratableDbSettings
 
-awesomeDB :: DatabaseSettings be AwesomeDb
-awesomeDB = defaultDbSettings
+checkedAwesomeDB :: CheckedDatabaseSettings Postgres AwesomeDb
+checkedAwesomeDB = defaultMigratableDbSettings @PgCommandSyntax
