@@ -51,6 +51,7 @@ in {
         local all all trust
         host all all ::1/128 trust
       '';
+      # TODO use that schema program instead?
       initialScript = pkgs.writeText "backend-initScript" ''
         CREATE ROLE awesomeuser WITH LOGIN;
         CREATE DATABASE awesome_db;
