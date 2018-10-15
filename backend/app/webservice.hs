@@ -1,11 +1,11 @@
-{-# LANGUAGE LambdaCase #-}
+{-# LANGUAGE LambdaCase        #-}
 {-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE RecordWildCards #-}
+{-# LANGUAGE RecordWildCards   #-}
 module Main where
 
-import           Database.PostgreSQL.Simple   (connectPostgreSQL)
-import Lib
-import DB.Cli
+import           Database.PostgreSQL.Simple (connectPostgreSQL)
+import           DB.Cli
+import           Lib
 import           Options.Applicative
 
 newtype BackendSettings = BackendSettings {
@@ -29,7 +29,7 @@ readSettings = customExecParser (prefs showHelpOnError) $ info
     ( fullDesc <> Options.Applicative.header "Migrations" <> progDesc
       "Running the webservice"
     )
-backendOptions :: Parser BackendSettings 
+backendOptions :: Parser BackendSettings
 backendOptions = BackendSettings <$> strOption
     (  short 's'
     <> long "static-folder"
