@@ -1,7 +1,7 @@
 let reflex-platform = builtins.fetchGit {
       url = https://github.com/reflex-frp/reflex-platform.git;
       ref = "develop";
-      rev = "a700776dd17a2a2cf3571f35920d3d57730c3ad6";
+      rev = "f3ff81d519b226752c83eefd4df6718539c3efdc";
     };
 in (import reflex-platform { }).project ({ pkgs, ... }: {
     packages = {
@@ -14,7 +14,12 @@ in (import reflex-platform { }).project ({ pkgs, ... }: {
       beam-migrate = self.callPackage ./packages/beam-migrate.nix { };
       beam-postgres = self.callPackage ./packages/beam-postgres.nix { };
       servant-reflex = self.callPackage ./packages/servant-reflex.nix { };
+      servant = pkgs.haskell.lib.dontCheck (pkgs.haskell.lib.overrideCabal super.servant (drv: {
+        testHaskellDepends = []; # servant has a dependency on testdoc 0.16.0 which fails to build in nix
+      }));
       backend = pkgs.haskell.lib.overrideCabal super.backend (drv: { enableSharedExecutables = false; });
+      common = pkgs.haskell.lib.dontHaddock (pkgs.haskell.lib.overrideCabal super.common (drv: { libraryToolDepends = []; }));
+      frontend = pkgs.haskell.lib.dontHaddock (pkgs.haskell.lib.overrideCabal super.frontend (drv: { libraryToolDepends = []; }));
     };
 
     shells = {
@@ -23,10 +28,6 @@ in (import reflex-platform { }).project ({ pkgs, ... }: {
     };
 
     shellToolOverrides = ghc: super: {
-        inherit (ghc) hpack;
-        fswatcher = pkgs.inotify-tools;
-        postgresql = pkgs.postgresql;
-        cabal2nix = pkgs.haskellPackages.cabal2nix;
         ccjs = pkgs.closurecompiler;
         vim = pkgs.vim;
     };

@@ -1,7 +1,10 @@
--- This file has been generated from package.yaml by hpack version 0.18.1.
+-- This file has been generated from package.yaml by hpack version 0.28.2.
 --
 -- see: https://github.com/sol/hpack
+--
+-- hash: 3379075613ecac2eaf0873fcfd086d8f08043f2def1589fb710fad57f0459680
 
+cabal-version:  >= 1.10
 name:           backend
 version:        1.0.0.0
 description:    Please see the README on GitHub at <https://github.com/githubuser/awesome-project-name#readme>
@@ -13,8 +16,6 @@ copyright:      2018 Jappie Klooster
 license:        MIT
 license-file:   LICENSE
 build-type:     Simple
-cabal-version:  >= 1.10
-
 extra-source-files:
     ChangeLog.md
     README.md
@@ -28,17 +29,15 @@ library
       src
   ghc-options: -Werror -Wall -Wcompat -Wincomplete-uni-patterns -Widentities
   build-depends:
-      base >= 4.7 && < 5
-    , servant-server
-    , aeson
-    , wai
-    , warp
-    , bytestring
+      aeson
+    , base >=4.7 && <5
     , beam-core
     , beam-migrate
     , beam-postgres
-    , postgresql-simple
+    , bytestring
     , common
+    , postgresql-simple
+    , servant-server
     , text
     , optparse-applicative == 0.14.3.0
   exposed-modules:
@@ -73,21 +72,22 @@ executable schema
 
 executable webservice
   main-is: webservice.hs
+  other-modules:
+      Paths_backend
   hs-source-dirs:
       app
   ghc-options: -Werror -Wall -Wcompat -Wincomplete-uni-patterns -Widentities -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      base >= 4.7 && < 5
-    , servant-server
-    , aeson
-    , wai
-    , warp
-    , bytestring
+      aeson
+    , backend
+    , base >=4.7 && <5
     , beam-core
     , beam-migrate
     , beam-postgres
-    , postgresql-simple
+    , bytestring
     , common
+    , postgresql-simple
+    , servant-server
     , text
     , optparse-applicative == 0.14.3.0
     , backend
@@ -96,21 +96,22 @@ executable webservice
 test-suite awesome-project-name-test
   type: exitcode-stdio-1.0
   main-is: Spec.hs
+  other-modules:
+      Paths_backend
   hs-source-dirs:
       test
   ghc-options: -Werror -Wall -Wcompat -Wincomplete-uni-patterns -Widentities -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      base >= 4.7 && < 5
-    , servant-server
-    , aeson
-    , wai
-    , warp
-    , bytestring
+      aeson
+    , backend
+    , base >=4.7 && <5
     , beam-core
     , beam-migrate
     , beam-postgres
-    , postgresql-simple
+    , bytestring
     , common
+    , postgresql-simple
+    , servant-server
     , text
     , optparse-applicative == 0.14.3.0
     , backend

@@ -26,6 +26,7 @@ dependencies:
 - servant-server # http server
 - aeson # json
 - wai # web application (interface)
+- wai-extra
 - warp # web application implementation
 - bytestring
 - beam-core

@@ -7,10 +7,17 @@ in {
 
   apiServer = { config, pkgs, nodes, ... }:
   let amis = import (pkgs.path + "/nixos/modules/virtualisation/ec2-amis.nix");
+      all-js-min = pkgs.runCommand "all-js-min" { buildInputs = [pkgs.closurecompiler];} ''
+        closure-compiler \
+          --compilation_level ADVANCED_OPTIMIZATIONS --jscomp_off=checkVars \
+          --externs=${awesome}/ghcjs/frontend/bin/webservice.jsexe/all.js.externs \
+          ${awesome}/ghcjs/frontend/bin/webservice.jsexe/all.js > $out
+      '';
       awesome-mini = pkgs.runCommand "awesome" {} ''
-        mkdir $out
+        mkdir $out $out/static
         cp ${awesome}/ghc/backend/bin/webservice $out
-        cp -r ${awesome}/ghcjs/frontend/bin/webservice.jsexe/ $out/static
+        cp -r ${./static}/* $out/static/
+        cp ${all-js-min} $out/static/all.js
       '';
   in {
 

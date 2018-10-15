@@ -4,7 +4,7 @@
 }:
 mkDerivation {
   pname = "beam-core";
-  version = "0.7.2.0";
+  version = "0.7.2.2";
   libraryHaskellDepends = [
     aeson base bytestring containers dlist free ghc-prim hashable
     microlens mtl network-uri tagged text time vector-sized
