@@ -4,11 +4,11 @@
 {-# LANGUAGE OverloadedStrings     #-}
 {-# LANGUAGE StandaloneDeriving    #-}
 {-# LANGUAGE TypeFamilies          #-}
+{-# LANGUAGE TypeApplications #-}
 {-# LANGUAGE DuplicateRecordFields #-}
 
 -- | db structure and source of truth
 module DB where
-import qualified Data.ByteString                as BS
 import qualified Data.Text                      as Text
 import           Database.Beam
 import           Database.Beam.Postgres(Postgres, PgCommandSyntax)
@@ -61,7 +61,7 @@ data AwesomeDb f = AwesomeDb
 instance Database Postgres AwesomeDb
 
 awesomeDB :: DatabaseSettings Postgres AwesomeDb
-awesomeDB = unCheckDatabase defaultMigratableDbSettings
+awesomeDB = unCheckDatabase checkedAwesomeDB
 
 checkedAwesomeDB :: CheckedDatabaseSettings Postgres AwesomeDb
 checkedAwesomeDB = defaultMigratableDbSettings @PgCommandSyntax

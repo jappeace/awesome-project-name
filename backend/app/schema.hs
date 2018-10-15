@@ -16,7 +16,7 @@ main :: IO ()
 main = do
   connString <- readSettings
   conn <- connectPostgreSQL $ unConnectionString connString
-  runBeamPostgresDebug putStrLn conn $ createSchema migrationBackend checkedRaster 
+  runBeamPostgresDebug putStrLn conn $ createSchema migrationBackend checkedAwesomeDB
 
 readSettings :: IO PgConnectionString
 readSettings = customExecParser (prefs showHelpOnError) $ info
@@ -26,4 +26,3 @@ readSettings = customExecParser (prefs showHelpOnError) $ info
     ( fullDesc <> Options.Applicative.header "Migrations" <> progDesc
       "Schema management"
     )
-

@@ -1,15 +1,15 @@
 {-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE RecordWildCards #-}
 module Main where
 
 import           Database.PostgreSQL.Simple   (connectPostgreSQL)
-import DB
 import Lib
-import System.Environment
 import DB.Cli
+import           Options.Applicative
 
 newtype BackendSettings = BackendSettings {
-    serveFolder :: Maybe FilePath
+    serveFolder :: FilePath
     }
 defaultStaticFolder :: FilePath
 defaultStaticFolder
@@ -17,19 +17,17 @@ defaultStaticFolder
 
 main :: IO ()
 main = do
-  staticFolder <- flip fmap getArgs $ \case
-    [] -> defaultStaticFolder
-    arg:_ -> arg
-  conn <- connectPostgreSQL connectionString
-  webAppEntry conn staticFolder
+  (connString, BackendSettings{..}) <- readSettings
+  conn <- connectPostgreSQL $ unConnectionString connString
+  webAppEntry conn serveFolder
 
 readSettings :: IO (PgConnectionString, BackendSettings)
 readSettings = customExecParser (prefs showHelpOnError) $ info
     (   helper
-    <*> (,) <$> postgresOptions <*> backendOptions
+    <*> ((,) <$> postgresOptions <*> backendOptions)
     )
     ( fullDesc <> Options.Applicative.header "Migrations" <> progDesc
-      "Schema management"
+      "Running the webservice"
     )
 backendOptions :: Parser BackendSettings 
 backendOptions = BackendSettings <$> strOption
