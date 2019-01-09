@@ -33,7 +33,7 @@ enter:
 enter-js:
 	nix-shell --cores 0 -j 8 -A shells.ghcjs --pure $(EXTRA)
 
-run: create-db
+run:
 	./dist-newstyle/build/x86_64-linux/ghc-8.4.3/backend-1.0.0.0/x/webservice/build/webservice/webservice
 
 clean:

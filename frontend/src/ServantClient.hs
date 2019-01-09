@@ -1,30 +1,28 @@
-{-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE RankNTypes #-}
-{-# LANGUAGE TypeApplications #-}
-{-# LANGUAGE AllowAmbiguousTypes #-}
+{-# LANGUAGE AllowAmbiguousTypes       #-}
+{-# LANGUAGE OverloadedStrings         #-}
+{-# LANGUAGE RankNTypes                #-}
+{-# LANGUAGE TypeApplications          #-}
 
-{-# LANGUAGE NoMonomorphismRestriction          #-}
-{-# LANGUAGE PartialTypeSignatures #-}
-{-# LANGUAGE ScopedTypeVariables #-}
-{-# LANGUAGE TypeOperators #-}
+{-# LANGUAGE NoMonomorphismRestriction #-}
+{-# LANGUAGE PartialTypeSignatures     #-}
+{-# LANGUAGE ScopedTypeVariables       #-}
+{-# LANGUAGE TypeOperators             #-}
 
 {-# OPTIONS_GHC  -Wno-partial-type-signatures #-}
 
 -- | This modules purpose is just to generate the xhr clients.
 --   there is some type magick going on generating these,
 --   therefore the functions are isolated.
-module ServantClient
-  ( postMessage, getUsers 
-  ) where
+module ServantClient where
 
 
-import Reflex
-import Reflex.Dom
-import qualified Data.Text as Text
-import Servant.API
-import Common
-import Servant.Reflex
-import Data.Proxy
+import           Common
+import           Data.Proxy
+import qualified Data.Text      as Text
+import           Reflex
+import           Reflex.Dom
+import           Servant.API
+import           Servant.Reflex
 
 -- | This intermediate definition is necisarry because the @m is similar for both clients,
 --   they have the same wrapping monad however the containing type is different
@@ -41,4 +39,7 @@ postMessage :: MonadWidget t m
             => Dynamic t (Either Text.Text Message)
             -> Event t ()
             -> m (Event t (ReqResult () [Message]))
-(getUsers :<|> postMessage) = apiClients
+getPlants :: MonadWidget t m
+          => Event t ()  -- ^ Trigger the XHR Request
+          -> m (Event t (ReqResult () [Plant])) -- ^ Consume the answer
+(getUsers :<|> postMessage :<|> getPlants) = apiClients

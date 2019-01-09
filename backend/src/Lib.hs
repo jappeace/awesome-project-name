@@ -1,4 +1,4 @@
-{-# LANGUAGE DataKinds #-}
+{-# LANGUAGE DataKinds     #-}
 {-# LANGUAGE TypeOperators #-}
 
 {-# OPTIONS_GHC -Wno-missing-monadfail-instances #-}
@@ -8,21 +8,21 @@ module Lib
     ( webAppEntry
     ) where
 
-import Servant
-import Common
-import Control.Monad.IO.Class(liftIO)
-import Network.Wai(Application)
-import Network.Wai.Handler.Warp(run)
-import qualified Network.Wai as Wai
-import qualified Network.Wai.Middleware.Gzip as Wai
+import           Common
+import           Control.Monad.IO.Class                   (liftIO)
+import           Network.Wai                              (Application)
+import qualified Network.Wai                              as Wai
+import           Network.Wai.Handler.Warp                 (run)
+import qualified Network.Wai.Middleware.Gzip              as Wai
+import           Servant
 
-import           Database.PostgreSQL.Simple   (Connection)
-import qualified DB as DB
 import           Database.Beam.Backend.SQL.BeamExtensions (runInsertReturningList)
+import           Database.PostgreSQL.Simple               (Connection)
+import qualified DB                                       as DB
 
+import           Data.Text                                (pack, unpack)
 import qualified Database.Beam                            as Beam
-import qualified Database.Beam.Postgres                            as PgBeam
-import Data.Text(pack, unpack)
+import qualified Database.Beam.Postgres                   as PgBeam
 
 type Webservice = ServiceAPI
       :<|> Raw -- JS entry point
@@ -70,7 +70,7 @@ messages conn message = do
 
 server :: Connection -> FilePath -> Server Webservice
 server conn staticFolder =
-  (pure users :<|> messages conn) :<|> serveDirectoryFileServer staticFolder
+  (pure users :<|> messages conn :<|> pure mempty) :<|> serveDirectoryFileServer staticFolder
 
 app :: Connection -> FilePath -> Application
 app conn staticFolder = serve webservice (server conn staticFolder)

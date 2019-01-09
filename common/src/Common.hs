@@ -12,6 +12,15 @@ import           Servant.API
 type ServiceAPI =
           "api" :> "1.0" :> "users" :> Get '[JSON] [User]
       :<|> "api" :> "1.0" :> "message" :> ReqBody '[JSON] Message :> Post '[JSON] [Message]
+      :<|> "api" :> "1.0" :> "plants" :> Get '[JSON] [Plant]
+
+data Plant = Plant
+  { age    :: Int
+  , parent :: Maybe Plant
+  } deriving (Eq, Show, Generic)
+
+instance ToJSON Plant
+instance FromJSON Plant
 
 data Message = Message {
   from    :: User,

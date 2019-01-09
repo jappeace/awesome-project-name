@@ -1,68 +1,29 @@
 {-# LANGUAGE OverloadedStrings #-}
-{-# OPTIONS_GHC
-  -fprint-explicit-kinds -Wpartial-type-signatures #-}
 
 module Lib
-  ( reflex
+  ( body
   ) where
 
 import           Common
-import           Control.Applicative ((<$>), (<*>))
-import qualified Data.Text           as Text
+import           Control.Monad  (void)
 import           Reflex
 import           Reflex.Dom
 import           Servant.Reflex
 import           ServantClient
 
-reflex :: IO ()
-reflex =
-  mainWidget $
-  el "div" $
-        -- babys steps, get users from memory
-   do
-    intButton <- button "Get Users"
-    serverInts <- fmapMaybe reqSuccess <$> getUsers intButton
-    display =<< holdDyn ([User "none" "none"]) serverInts
-        -- Post a usermessage and display results
-    input <- messageInput
-    sendMsg <- button "Send Message"
-    messages <- fmapMaybe reqSuccess <$> postMessage (Right <$> input) sendMsg
-    resulting <-
-      holdDyn
-        ([Message (User "none" "none") "ddd"]) -- what to show if nothing
-        messages -- source of messages (if any)
-    _ <- el "div" $ simpleList resulting fancyMsg
-    pure ()
-  where
-    fancyMsg ::
-         (MonadWidget t m)
-      => Dynamic t Message
-      -> m (Element EventResult GhcjsDomSpace t)
-    fancyMsg msg =
-      elClass "div" "message" $ do
-        _ <- elDynHtml' "h1" $ Text.pack . name . from <$> msg
-        elDynHtml' "span" $ Text.pack . content <$> msg
+body :: MonadWidget t m => m ()
+body = do
+  nestEvtWidgets
 
-messageInput :: (MonadWidget t m) => m (Dynamic t Message)
-messageInput = do
-  user <- userInput
-  message <- labeledInput "message"
-  pure $ (Message <$> user) <*> (Text.unpack <$> _textInput_value message)
+nestEvtWidgets :: MonadWidget t m => m ()
+nestEvtWidgets = do
+  intButton <- button "Where is the other button?"
+  void $ widgetHold (pure ()) $
+    (const $ display =<< fancyButton) <$> intButton
 
-userInput :: (MonadWidget t m) => m (Dynamic t User)
-userInput = do
-  username <- labeledInput "username"
-  emailInput <- labeledInput "email"
-  pure $
-    User . Text.unpack <$> _textInput_value username <*>
-    (Text.unpack <$> _textInput_value emailInput)
-
-labeledInput :: (MonadWidget t m) => Text.Text -> m (TextInput t)
-labeledInput label =
-  elClass "div" "field" $ do
-    elClass "label" "label" $ text label
-    elClass "div" "control" $
-      textInput
-        (def &
-         textInputConfig_attributes .~
-         constDyn (Text.pack "class" =: Text.pack "input"))
+fancyButton :: MonadWidget t m => m (Dynamic t String)
+fancyButton = do
+  intButton <- button "I wonder what will happen?"
+  plantRes <- getPlants intButton
+  display =<< holdDyn [Plant 4 Nothing] (fmapMaybe reqSuccess plantRes)
+  holdDyn "not pressed" $ "pressed" <$ intButton
