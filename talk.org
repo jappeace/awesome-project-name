@@ -1,0 +1,246 @@
+
+#+TITLE: Fullstack Haskell with reflex & servant 
+#+OPTIONS: toc:nil num:nil
+#+REVEAL_ROOT: https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.6.0/
+# http://cdn.jsdelivr.net/reveal.js/3.0.0/
+
+  
+* Brief Intro
+   - I'm Jappie Klooster
+   - Founder of raster.click
+   - Experience
+	- 4 months w/ reflex,
+	- 10 months w/ servant
+
+* Why talk about Reflex & Servant
+  - Reflex makes frontend fun.
+    - Maintainable
+    - Easier
+  - Servant is incredible.
+    - Performant
+    - Simple
+    - Powerfull
+
+Judge for yourself.
+
+* FRP: Timeless design
+   - Push & pull paper
+   - Behavior = pull
+     - Contious read
+     - May change
+     - Mouse position
+   - Events = push
+     - Pulse read
+     - Mouse btn click
+   - Switching
+   - No notion of time
+     - Only events
+
+http://conal.net/papers/push-pull-frp/push-pull-frp.pdf
+
+* Reflex & FRP
+- Reflex
+   - An implementation of FRP
+   - reflex-dom
+   - reflex-platform
+- Less opinionated
+
+* Reflex building blocks
+
+# TODO is dynamic reflex invention ?? I think probably should read that paper
+#+BEGIN_SRC haskell
+# from push & pull paper
+Reflex t => Event t a
+Reflex t => Behavior t a
+
+# (reflex invention)
+Reflex t => Dynamic t a
+#+END_SRC
+
+* Let's make a 'widget'
+* Done!
+  with reflex-dom
+#+BEGIN_SRC haskell
+
+import Reflex.Dom
+main :: IO ()
+main = mainWidget $ helloWidget
+
+helloWidget  :: Dom.MonadWidget t m => m ()
+helloWidget  = text "Hello, world!"
+#+END_SRC
+
+What does this code do?
++ A - it launches the missles
++ B - doesn't compile
++ C - execute the infamous hello world
+
+** C - execute the infamous hello world
+
+** text
+#+BEGIN_SRC haskell
+text :: MonadWidget t m => String -> m () 
+mainWidget :: Widget Spider ... () -> IO () 
+
+helloWidget  :: Dom.MonadWidget t m => m ()
+helloWidget  = text "Hello, world!"
+
+main :: IO()
+main = mainWidget $ helloWidget
+#+END_SRC
+
+* Boring, We need input!
+
+* Input!
+#+BEGIN_SRC haskell  
+body :: MonadWidget t m => m ()
+body = display =<< fancyButton
+
+fancyButton :: MonadWidget t m => m (Dynamic t String)
+fancyButton = do
+  intButton <- button "I wonder what will happen?"
+  holdDyn "not pressed" $ "pressed" <$ intButton
+#+END_SRC
+
+What does this code do?
++ A - It shows a text input
++ B - doesn't compile
++ C - show a button and a text that indicates if pressed
++ D - Why are you asking me these questions?
+
+** C - show a button and a text that indicates if pressed
+** The button function
+#+BEGIN_SRC haskell
+button :: MonadWidget t m => String -> m (Event t ())
+holdDyn :: MonadHold t m => a -> Event t a -> m (Dynamic t a)
+display :: (MonadWidget t m, Show a) => Dynamic t a -> m ()
+
+fancyButton :: MonadWidget t m => m (Dynamic t String)
+fancyButton = do
+  intButton <- button "I wonder what will happen?"
+  holdDyn "not pressed" $ "pressed" <$ intButton
+
+body :: MonadWidget t m => m ()
+body = display =<< fancyButton
+#+END_SRC
+
+* What if I want to have a widget react on a event value?
+* Reflex react on stuff
+#+BEGIN_SRC haskell  
+body :: MonadWidget t m => m ()
+body = do
+  nestEvtWidgets
+
+nestEvtWidgets :: MonadWidget t m => m ()
+nestEvtWidgets = do
+  intButton <- button "Where is the other button?"
+  void $ widgetHold (pure ()) $
+    (const $ display =<< fancyButton) <$> intButton
+
+fancyButton :: MonadWidget t m => m (Dynamic t String)
+fancyButton = do
+  intButton <- button "I wonder what will happen?"
+  holdDyn "not pressed" $ "pressed" <$ intButton
+#+END_SRC
+
+What does this code do?
++ A - It renders a dom differently based on login information.
++ B - It doesn't compile.
++ C - show a button that shows a button that indicates if it has been pressed, if pressed.
++ D - Seriously aren't you supposed to tell us how this works?
+
+** C - show a button that shows a button that indicates if it has been pressed, if pressed.
+** Widget hold
+
+#+BEGIN_SRC haskell
+widgetHold :: MonadWidget t m => m a -> Event t (m a) -> m (Dynamic t a) 
+#+END_SRC
+
+* Pop quizz
+
+#+BEGIN_SRC haskell
+import Acme.Missiles
+body :: MonadWidget t m => m ()
+body = liftIO $ launchMissiles
+#+END_SRC
+
+What does this code do?
++ A - it launches the missles
++ B - doesn't compile
++ C - Cause serious international side effects
+
+** C - Cause serious international side effects
+    it's in the [[http://hackage.haskell.org/package/acme-missiles-0.3/docs/Acme-Missiles.html][docs]].
+    besides it's always C.
+
+* Boring frontend needs server
+This is where I postpone reflex and prepone servant.
+
+* Servant
+- Endpoint = function
+- Rest API at type level
+- Functions from types
+- backend
+  - Implement yourself w/ typesafty
+- Frontend: generated 
+  - Endpoints become functions
+  
+* Servant example
+It's reasonably obvious once you see a definition.
+
+#+BEGIN_SRC haskell
+type ServiceAPI =
+          "api" :> "1.0" :> "users" :> Get '[JSON] [User]
+      :<|> "api" :> "1.0" :> "message" :>
+	  ReqBody '[JSON] Message :> Post '[JSON] [Message]
+#+END_SRC
+
+What does this code do?
+
+- A. It defines a type ServiceAPI
+- B. It implements the type ServiceAPI
+- C. displays a string containing the ominous words "Hello World"
+
+* servant example backend
+in memory delivery of users, messages are more complicated
+#+BEGIN_SRC haskell
+users :: [User]
+users =
+  [ User "Isaac Newton"    "isaac@newton.co.uk"
+  , User "Albert Einstein" "ae@mc2.org"
+  ]
+server :: Connection -> Server Webservice
+server conn =
+  (pure users
+    :<|> messages conn)
+#+END_SRC
+
+* servant example frontend
+#+BEGIN_SRC haskell
+getUsers :: MonadWidget t m
+          => Event t ()  -- ^ Trigger the XHR Request
+          -> m (Event t (ReqResult () [User])) -- ^ Consume the answer
+postMessage :: MonadWidget t m
+            => Dynamic t (Either Text.Text Message)
+            -> Event t ()
+            -> m (Event t (ReqResult () [Message]))
+(getUsers :<|> postMessage) = apiClients
+#+END_SRC
+
+* Demo
++ Add an endpoint and use it
+
+* Servant issues
+- Error messages
+- Type level 
+- Fully parralel (co-routines)
+
+* Reflex issues
+- JS binaries are big
+  - 6mb output
+  - expect 500kb transfer size
+- Few resources.
+- Releases on hackage..
+- Infrequent weirdness.
+
+* Q&A
