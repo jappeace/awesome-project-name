@@ -5,45 +5,28 @@
 # http://cdn.jsdelivr.net/reveal.js/3.0.0/
 
   
-* Brief Intro
-   - I'm Jappie Klooster
-   - Founder of raster.click
-   - Experience
-	- 4 months w/ reflex,
-	- 10 months w/ servant
-
 * Why talk about Reflex & Servant
-  - Reflex makes frontend fun.
+  - Reflex
+    - Frontend fun
     - Maintainable
     - Easier
-  - Servant is incredible.
+  - Servant
     - Performant
     - Simple
     - Powerfull
 
 Judge for yourself.
 
-* FRP: Timeless design
-   - Push & pull paper
-   - Behavior = pull
-     - Contious read
-     - May change
-     - Mouse position
-   - Events = push
-     - Pulse read
-     - Mouse btn click
-   - Switching
-   - No notion of time
-     - Only events
-
-http://conal.net/papers/push-pull-frp/push-pull-frp.pdf
-
+* Goal of presentation
 * Reflex & FRP
+# http://conal.net/papers/push-pull-frp/push-pull-frp.pdf
+
 - Reflex
    - An implementation of FRP
    - reflex-dom
    - reflex-platform
-- Less opinionated
+- Other options
+  - frp zoo
 
 * Reflex building blocks
 
@@ -58,11 +41,10 @@ Reflex t => Dynamic t a
 #+END_SRC
 
 * Let's make a 'widget'
+
 * Done!
   with reflex-dom
 #+BEGIN_SRC haskell
-
-import Reflex.Dom
 main :: IO ()
 main = mainWidget $ helloWidget
 
@@ -80,18 +62,11 @@ What does this code do?
 ** text
 #+BEGIN_SRC haskell
 text :: MonadWidget t m => String -> m () 
-mainWidget :: Widget Spider ... () -> IO () 
-
-helloWidget  :: Dom.MonadWidget t m => m ()
-helloWidget  = text "Hello, world!"
-
-main :: IO()
-main = mainWidget $ helloWidget
 #+END_SRC
 
-* Boring, We need input!
+* Wait where are the behaviors/events?
 
-* Input!
+* Input
 #+BEGIN_SRC haskell  
 body :: MonadWidget t m => m ()
 body = display =<< fancyButton
@@ -109,19 +84,18 @@ What does this code do?
 + D - Why are you asking me these questions?
 
 ** C - show a button and a text that indicates if pressed
+** Demo
 ** The button function
 #+BEGIN_SRC haskell
 button :: MonadWidget t m => String -> m (Event t ())
+#+END_SRC
+** Holddyn
+#+BEGIN_SRC haskell
 holdDyn :: MonadHold t m => a -> Event t a -> m (Dynamic t a)
+#+END_SRC
+** Display
+#+BEGIN_SRC haskell
 display :: (MonadWidget t m, Show a) => Dynamic t a -> m ()
-
-fancyButton :: MonadWidget t m => m (Dynamic t String)
-fancyButton = do
-  intButton <- button "I wonder what will happen?"
-  holdDyn "not pressed" $ "pressed" <$ intButton
-
-body :: MonadWidget t m => m ()
-body = display =<< fancyButton
 #+END_SRC
 
 * What if I want to have a widget react on a event value?
@@ -129,10 +103,6 @@ body = display =<< fancyButton
 #+BEGIN_SRC haskell  
 body :: MonadWidget t m => m ()
 body = do
-  nestEvtWidgets
-
-nestEvtWidgets :: MonadWidget t m => m ()
-nestEvtWidgets = do
   intButton <- button "Where is the other button?"
   void $ widgetHold (pure ()) $
     (const $ display =<< fancyButton) <$> intButton
@@ -150,35 +120,20 @@ What does this code do?
 + D - Seriously aren't you supposed to tell us how this works?
 
 ** C - show a button that shows a button that indicates if it has been pressed, if pressed.
+** Demo
 ** Widget hold
 
 #+BEGIN_SRC haskell
 widgetHold :: MonadWidget t m => m a -> Event t (m a) -> m (Dynamic t a) 
 #+END_SRC
 
-* Pop quizz
-
-#+BEGIN_SRC haskell
-import Acme.Missiles
-body :: MonadWidget t m => m ()
-body = liftIO $ launchMissiles
-#+END_SRC
-
-What does this code do?
-+ A - it launches the missles
-+ B - doesn't compile
-+ C - Cause serious international side effects
-
-** C - Cause serious international side effects
-    it's in the [[http://hackage.haskell.org/package/acme-missiles-0.3/docs/Acme-Missiles.html][docs]].
-    besides it's always C.
-
+** There is also dyn
 * Boring frontend needs server
 This is where I postpone reflex and prepone servant.
 
 * Servant
+- REST API at type level
 - Endpoint = function
-- Rest API at type level
 - Functions from types
 - backend
   - Implement yourself w/ typesafty
