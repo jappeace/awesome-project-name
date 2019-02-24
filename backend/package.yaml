@@ -36,6 +36,8 @@ dependencies:
 - common
 - text
 - optparse-applicative == 0.14.3.0
+- servant-auth-server
+- cookie
 
 library:
   source-dirs: src

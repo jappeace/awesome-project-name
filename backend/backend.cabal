@@ -2,7 +2,7 @@
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 437468f3ed6474bf9dc099292c19a72d6caf44e5e86ff7c163512e18ccee497a
+-- hash: 91fd234d04aa96f20ff6b3cfcb301f97b239c235dc3931ba193b3312f62d824a
 
 cabal-version:  >= 1.10
 name:           backend
@@ -36,8 +36,10 @@ library
     , beam-postgres
     , bytestring
     , common
+    , cookie
     , optparse-applicative ==0.14.3.0
     , postgresql-simple
+    , servant-auth-server
     , servant-server
     , text
     , wai
@@ -67,8 +69,10 @@ executable schema
     , beam-postgres
     , bytestring
     , common
+    , cookie
     , optparse-applicative ==0.14.3.0
     , postgresql-simple
+    , servant-auth-server
     , servant-server
     , text
     , wai
@@ -92,8 +96,10 @@ executable webservice
     , beam-postgres
     , bytestring
     , common
+    , cookie
     , optparse-applicative ==0.14.3.0
     , postgresql-simple
+    , servant-auth-server
     , servant-server
     , text
     , wai
@@ -118,8 +124,10 @@ test-suite awesome-project-name-test
     , beam-postgres
     , bytestring
     , common
+    , cookie
     , optparse-applicative ==0.14.3.0
     , postgresql-simple
+    , servant-auth-server
     , servant-server
     , text
     , wai

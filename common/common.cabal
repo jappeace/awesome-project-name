@@ -2,7 +2,7 @@
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: bade16f57a0d76ad300331dc9789a74e645afcd6418e2ffddf2f8a6c4e700486
+-- hash: 45bf98dcf2fe87addac155430dded83c56a583497a784ebc8a1fd0d1ac5105b2
 
 cabal-version:  >= 1.10
 name:           common
@@ -31,7 +31,9 @@ library
   build-depends:
       aeson
     , base >=4.7 && <5
+    , cookie
     , servant
+    , servant-auth
     , text
   exposed-modules:
       Common

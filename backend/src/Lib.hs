@@ -1,4 +1,4 @@
-{-# LANGUAGE DataKinds #-}
+{-# LANGUAGE DataKinds     #-}
 {-# LANGUAGE TypeOperators #-}
 
 {-# OPTIONS_GHC -Wno-missing-monadfail-instances #-}
@@ -8,21 +8,22 @@ module Lib
     ( webAppEntry
     ) where
 
-import Servant
-import Common
-import Control.Monad.IO.Class(liftIO)
-import Network.Wai(Application)
-import Network.Wai.Handler.Warp(run)
-import qualified Network.Wai as Wai
-import qualified Network.Wai.Middleware.Gzip as Wai
+import           Common
+import           Control.Monad.IO.Class                   (liftIO)
+import           Network.Wai                              (Application)
+import qualified Network.Wai                              as Wai
+import           Network.Wai.Handler.Warp                 (run)
+import qualified Network.Wai.Middleware.Gzip              as Wai
+import           Servant
 
-import           Database.PostgreSQL.Simple   (Connection)
-import qualified DB as DB
 import           Database.Beam.Backend.SQL.BeamExtensions (runInsertReturningList)
+import           Database.PostgreSQL.Simple               (Connection)
+import qualified DB                                       as DB
 
+import           Data.Text                                (pack, unpack)
 import qualified Database.Beam                            as Beam
-import qualified Database.Beam.Postgres                            as PgBeam
-import Data.Text(pack, unpack)
+import qualified Database.Beam.Postgres                   as PgBeam
+import           Servant.Auth.Server
 
 type Webservice = ServiceAPI
       :<|> Raw -- JS entry point
@@ -67,16 +68,41 @@ messages conn message = do
         (unpack $ DB._content msg)
     ) fromDb
 
+login :: BackendSettings -> User -> Handler (AuthCookies NoContent)
+login settings user = if elem user users then do
+    withCookies <- liftIO $ acceptLogin cookies (jwtSettings settings) user
+    pure $ maybe (clearSession cookies NoContent) (\x -> x NoContent) withCookies
+  else throwAll err401 -- unauthorized
+  where
+    cookies = cookieSettings settings
 
-server :: Connection -> FilePath -> Server Webservice
-server conn staticFolder =
-  (pure users :<|> messages conn) :<|> serveDirectoryFileServer staticFolder
+server :: BackendSettings -> FilePath -> Server Webservice
+server settings staticFolder =
+  (login settings :<|> authenticatedServer settings) :<|> serveDirectoryFileServer staticFolder
 
-app :: Connection -> FilePath -> Application
-app conn staticFolder = serve webservice (server conn staticFolder)
+authenticatedServer :: BackendSettings -> AuthResult User -> Server AuthAPI
+authenticatedServer settings (Authenticated _) =
+    (pure users :<|> messages (connection settings))
+authenticatedServer _ _ = throwAll err401 -- unauthorized
 
-webAppEntry :: Connection -> FilePath -> IO ()
-webAppEntry conn staticFolder = run 6868 $ compress $ app conn staticFolder
+app :: BackendSettings -> FilePath -> Application
+app settings staticFolder =
+  serveWithContext webservice context $ server settings staticFolder
+  where
+    context = cookieSettings settings :. jwtSettings settings :. EmptyContext
+
+webAppEntry :: BackendSettings -> FilePath -> IO ()
+webAppEntry settings staticFolder = run 6868 $ compress $ app settings staticFolder
 
 compress :: Wai.Middleware
 compress = Wai.gzip Wai.def { Wai.gzipFiles = Wai.GzipCompress }
+
+data BackendSettings = BackendSettings
+  { cookieSettings :: CookieSettings
+  , jwtSettings    :: JWTSettings
+  , connection     :: Connection
+  }
+
+-- doesn't make sense client side
+instance ToJWT User
+instance FromJWT User

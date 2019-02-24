@@ -26,6 +26,8 @@ dependencies:
 - aeson # json
 - text
 - servant
+- cookie
+- servant-auth
 
 library:
   source-dirs: src
