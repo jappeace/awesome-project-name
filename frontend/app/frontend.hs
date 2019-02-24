@@ -1,7 +1,8 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Main where
 
-import Lib
+import           Lib
+import           Reflex.Dom
 
 main :: IO ()
-main = reflex
+main = mainWidget reflex

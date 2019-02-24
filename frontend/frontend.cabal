@@ -2,7 +2,7 @@
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 51553ffd8b7389fccb97c91859e1459343fd269166f628c57cd4c2e96238c247
+-- hash: 52a4e68dbe0a3ff8193a714a2bc788f2537552b1250f7bb410255ce846d200d6
 
 cabal-version:  >= 1.10
 name:           frontend
@@ -33,15 +33,21 @@ library
   build-depends:
     aeson,
     base >=4.7 && <5,
+    bytestring,
     common,
     containers,
+    cookie,
+    http-api-data,
     reflex,
     reflex-dom,
     servant,
     servant-reflex,
-    text
+    text,
+    time
   exposed-modules:
+    Helpers
     Lib
+    Orphanage
     ServantClient
   other-modules:
     Paths_frontend
@@ -59,14 +65,18 @@ executable webservice
   build-depends:
     aeson,
     base >=4.7 && <5,
+    bytestring,
     common,
     containers,
+    cookie,
     frontend,
+    http-api-data,
     reflex,
     reflex-dom,
     servant,
     servant-reflex,
-    text
+    text,
+    time
   default-language: Haskell2010
 
 test-suite awesome-project-name-test
@@ -82,12 +92,16 @@ test-suite awesome-project-name-test
   build-depends:
     aeson,
     base >=4.7 && <5,
+    bytestring,
     common,
     containers,
+    cookie,
     frontend,
+    http-api-data,
     reflex,
     reflex-dom,
     servant,
     servant-reflex,
-    text
+    text,
+    time
   default-language: Haskell2010

@@ -38,6 +38,7 @@ dependencies:
 - optparse-applicative == 0.14.3.0
 - servant-auth-server
 - cookie
+- time
 
 library:
   source-dirs: src

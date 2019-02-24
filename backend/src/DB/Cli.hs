@@ -1,15 +1,15 @@
-{-# LANGUAGE OverloadedStrings     #-}
+{-# LANGUAGE OverloadedStrings #-}
 
 
 -- | Deal with db
 module DB.Cli where
 
-import qualified Data.ByteString as BS
-import Options.Applicative
-import Data.Monoid((<>)) -- sauron
+import qualified Data.ByteString     as BS
+import           Data.Monoid         ((<>))
+import           Options.Applicative
 
 defaultConnectionString :: BS.ByteString
-defaultConnectionString = "dbname=raster_db"
+defaultConnectionString = "dbname=awesome_db"
 
 newtype PgConnectionString = PgConnectionString { unConnectionString :: BS.ByteString }
 

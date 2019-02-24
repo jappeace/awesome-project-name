@@ -2,7 +2,7 @@
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 91fd234d04aa96f20ff6b3cfcb301f97b239c235dc3931ba193b3312f62d824a
+-- hash: c9bb84b6e0fba921f586dcc9367235a10eed4748748d7e861f71a5f99ae31297
 
 cabal-version:  >= 1.10
 name:           backend
@@ -42,6 +42,7 @@ library
     , servant-auth-server
     , servant-server
     , text
+    , time
     , wai
     , wai-extra
     , warp
@@ -75,6 +76,7 @@ executable schema
     , servant-auth-server
     , servant-server
     , text
+    , time
     , wai
     , wai-extra
     , warp
@@ -102,6 +104,7 @@ executable webservice
     , servant-auth-server
     , servant-server
     , text
+    , time
     , wai
     , wai-extra
     , warp
@@ -130,6 +133,7 @@ test-suite awesome-project-name-test
     , servant-auth-server
     , servant-server
     , text
+    , time
     , wai
     , wai-extra
     , warp

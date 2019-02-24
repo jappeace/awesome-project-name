@@ -14,13 +14,13 @@
 --   there is some type magick going on generating these,
 --   therefore the functions are isolated.
 module ServantClient
-  ( postMessage, getUsers
+  ( postMessage, getUsers, postLogin
   ) where
-
 
 import           Common
 import           Data.Proxy
 import qualified Data.Text      as Text
+import           Orphanage      ()
 import           Reflex
 import           Reflex.Dom
 import           Servant.API

@@ -2,10 +2,11 @@
 {-# LANGUAGE TypeOperators #-}
 
 {-# OPTIONS_GHC -Wno-missing-monadfail-instances #-}
+{-# OPTIONS_GHC -fno-warn-orphans #-}
 
 
 module Lib
-    ( webAppEntry
+    ( webAppEntry, ApiSettings(..)
     ) where
 
 import           Common
@@ -68,7 +69,7 @@ messages conn message = do
         (unpack $ DB._content msg)
     ) fromDb
 
-login :: BackendSettings -> User -> Handler (AuthCookies NoContent)
+login :: ApiSettings -> User -> Handler (AuthCookies NoContent)
 login settings user = if elem user users then do
     withCookies <- liftIO $ acceptLogin cookies (jwtSettings settings) user
     pure $ maybe (clearSession cookies NoContent) (\x -> x NoContent) withCookies
@@ -76,28 +77,28 @@ login settings user = if elem user users then do
   where
     cookies = cookieSettings settings
 
-server :: BackendSettings -> FilePath -> Server Webservice
+server :: ApiSettings -> FilePath -> Server Webservice
 server settings staticFolder =
   (login settings :<|> authenticatedServer settings) :<|> serveDirectoryFileServer staticFolder
 
-authenticatedServer :: BackendSettings -> AuthResult User -> Server AuthAPI
+authenticatedServer :: ApiSettings -> AuthResult User -> Server AuthAPI
 authenticatedServer settings (Authenticated _) =
     (pure users :<|> messages (connection settings))
 authenticatedServer _ _ = throwAll err401 -- unauthorized
 
-app :: BackendSettings -> FilePath -> Application
+app :: ApiSettings -> FilePath -> Application
 app settings staticFolder =
   serveWithContext webservice context $ server settings staticFolder
   where
     context = cookieSettings settings :. jwtSettings settings :. EmptyContext
 
-webAppEntry :: BackendSettings -> FilePath -> IO ()
+webAppEntry :: ApiSettings -> FilePath -> IO ()
 webAppEntry settings staticFolder = run 6868 $ compress $ app settings staticFolder
 
 compress :: Wai.Middleware
 compress = Wai.gzip Wai.def { Wai.gzipFiles = Wai.GzipCompress }
 
-data BackendSettings = BackendSettings
+data ApiSettings = ApiSettings
   { cookieSettings :: CookieSettings
   , jwtSettings    :: JWTSettings
   , connection     :: Connection

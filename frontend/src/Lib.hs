@@ -1,6 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
-{-# OPTIONS_GHC
-  -fprint-explicit-kinds -Wpartial-type-signatures #-}
+{-# LANGUAGE RecursiveDo       #-}
 
 module Lib
   ( reflex
@@ -8,46 +7,70 @@ module Lib
 
 import           Common
 import           Control.Applicative ((<$>), (<*>))
+import           Control.Monad       (void)
+import qualified Data.Map            as Map
 import qualified Data.Text           as Text
+import           Helpers             (flash, holdEvent)
 import           Reflex
 import           Reflex.Dom
 import           Servant.Reflex
 import           ServantClient
 
-reflex :: IO ()
-reflex =
-  mainWidget $
-  el "div" $
-        -- babys steps, get users from memory
-   do
-    intButton <- button "Get Users"
-    serverInts <- fmapMaybe reqSuccess <$> getUsers intButton
-    display =<< holdDyn ([User "none" "none"]) serverInts
-        -- Post a usermessage and display results
-    input <- messageInput
+hidden :: Map.Map Text.Text Text.Text
+hidden = Map.singleton "style" "display:none;"
+
+reflex :: MonadWidget t m => m ()
+reflex = do
+  rec loginEvt <- elDynAttr "div" loginAttr loginWidget
+      loginAttr <- holdDyn (Map.empty) $ hidden <$ loginEvt
+  void $ holdEvent () loginEvt authenticatedWidget
+
+authenticatedWidget :: MonadWidget t m => User -> m ()
+authenticatedWidget user =
+  el "div" $ do
+    getUsersWidget
+    sendMsgWidget user
+
+sendMsgWidget :: MonadWidget t m => User -> m ()
+sendMsgWidget user =
+  el "div" $ do
+    input <- messageInput user
     sendMsg <- button "Send Message"
     messages <- fmapMaybe reqSuccess <$> postMessage (Right <$> input) sendMsg
     resulting <-
       holdDyn
         ([Message (User "none" "none") "ddd"]) -- what to show if nothing
         messages -- source of messages (if any)
-    _ <- el "div" $ simpleList resulting fancyMsg
-    pure ()
-  where
-    fancyMsg ::
-         (MonadWidget t m)
-      => Dynamic t Message
-      -> m (Element EventResult GhcjsDomSpace t)
-    fancyMsg msg =
-      elClass "div" "message" $ do
-        _ <- elDynHtml' "h1" $ Text.pack . name . from <$> msg
-        elDynHtml' "span" $ Text.pack . content <$> msg
+    void $ el "div" $ simpleList resulting fancyMsg
 
-messageInput :: (MonadWidget t m) => m (Dynamic t Message)
-messageInput = do
-  user <- userInput
+fancyMsg ::
+     (MonadWidget t m)
+  => Dynamic t Message
+  -> m (Element EventResult GhcjsDomSpace t)
+fancyMsg msg =
+  elClass "div" "message" $ do
+    _ <- elDynHtml' "h1" $ Text.pack . name . from <$> msg
+    elDynHtml' "span" $ Text.pack . content <$> msg
+
+getUsersWidget :: MonadWidget t m => m ()
+getUsersWidget =
+  el "div" $ do
+    intButton <- button "Get Users"
+    serverInts <- fmapMaybe reqSuccess <$> getUsers intButton
+    display =<< holdDyn ([User "none" "none"]) serverInts
+
+messageInput :: (MonadWidget t m) => User -> m (Dynamic t Message)
+messageInput user = do
   message <- labeledInput "message"
-  pure $ (Message <$> user) <*> (Text.unpack <$> _textInput_value message)
+  pure $ Message user <$> (Text.unpack <$> _textInput_value message)
+
+loginWidget :: (MonadWidget t m) => m (Event t User)
+loginWidget = do
+  user <- userInput
+  intButton <- button "login"
+  postResult <- postLogin (Right <$> user) intButton
+  void $ flash postResult $ text . Text.pack . show . reqFailure
+  pure $ current user <@ withSuccess postResult
 
 userInput :: (MonadWidget t m) => m (Dynamic t User)
 userInput = do
@@ -66,3 +89,6 @@ labeledInput label =
         (def &
          textInputConfig_attributes .~
          constDyn (Text.pack "class" =: Text.pack "input"))
+
+withSuccess :: Reflex t => Event t (ReqResult () b) -> Event t b
+withSuccess = fmapMaybe reqSuccess

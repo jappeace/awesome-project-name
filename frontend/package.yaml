@@ -33,6 +33,10 @@ dependencies:
 - reflex
 - containers
 - common
+- bytestring
+- cookie
+- http-api-data
+- time
 
 library:
   source-dirs: src
