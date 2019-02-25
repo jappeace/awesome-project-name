@@ -77,14 +77,14 @@ login settings user = if elem user users then do
   where
     cookies = cookieSettings settings
 
-server :: ApiSettings -> FilePath -> Server Webservice
-server settings staticFolder =
-  (login settings :<|> authenticatedServer settings) :<|> serveDirectoryFileServer staticFolder
-
 authenticatedServer :: ApiSettings -> AuthResult User -> Server AuthAPI
 authenticatedServer settings (Authenticated user) =
     (pure user :<|> pure users :<|> messages (connection settings))
 authenticatedServer _ _ = throwAll err401 -- unauthorized
+
+server :: ApiSettings -> FilePath -> Server Webservice
+server settings staticFolder =
+  (login settings :<|> authenticatedServer settings) :<|> serveDirectoryFileServer staticFolder
 
 app :: ApiSettings -> FilePath -> Application
 app settings staticFolder =

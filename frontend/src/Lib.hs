@@ -31,6 +31,16 @@ authenticatedWidget user =
     getUsersWidget
     sendMsgWidget user
 
+loginWidget :: (MonadWidget t m) => m (Event t User)
+loginWidget = do
+  pb <- getPostBuild
+  autoLoginEvt <- getMe pb
+  user <- userInput
+  buttonEvt <- button "login"
+  postResult <- postLogin (Right <$> user) buttonEvt
+  void $ flash postResult $ text . Text.pack . show . reqFailure
+  pure $ leftmost [withSuccess autoLoginEvt, current user <@ withSuccess postResult]
+
 sendMsgWidget :: MonadWidget t m => User -> m ()
 sendMsgWidget user =
   el "div" $ do
@@ -42,6 +52,7 @@ sendMsgWidget user =
         ([Message (User "none" "none") "ddd"]) -- what to show if nothing
         messages -- source of messages (if any)
     void $ el "div" $ simpleList resulting fancyMsg
+
 
 fancyMsg ::
      (MonadWidget t m)
@@ -63,16 +74,6 @@ messageInput :: (MonadWidget t m) => User -> m (Dynamic t Message)
 messageInput user = do
   message <- labeledInput "message"
   pure $ Message user <$> (Text.unpack <$> _textInput_value message)
-
-loginWidget :: (MonadWidget t m) => m (Event t User)
-loginWidget = do
-  pb <- getPostBuild
-  autoLoginEvt <- getMe pb
-  user <- userInput
-  intButton <- button "login"
-  postResult <- postLogin (Right <$> user) intButton
-  void $ flash postResult $ text . Text.pack . show . reqFailure
-  pure $ leftmost [withSuccess autoLoginEvt, current user <@ withSuccess postResult]
 
 userInput :: (MonadWidget t m) => m (Dynamic t User)
 userInput = do
