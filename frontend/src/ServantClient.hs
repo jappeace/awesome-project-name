@@ -14,7 +14,7 @@
 --   there is some type magick going on generating these,
 --   therefore the functions are isolated.
 module ServantClient
-  ( postMessage, getUsers, postLogin
+  ( postMessage, getUsers, postLogin, getMe
   ) where
 
 import           Common
@@ -39,10 +39,13 @@ postLogin :: MonadWidget t m
           -> Event t ()
           -> m (Event t (ReqResult () (AuthCookies NoContent)))
 getUsers :: MonadWidget t m
-          => Event t ()  -- ^ Trigger the XHR Request
-          -> m (Event t (ReqResult () [User])) -- ^ Consume the answer
+          => Event t ()
+          -> m (Event t (ReqResult () [User]))
+getMe :: MonadWidget t m
+          => Event t ()
+          -> m (Event t (ReqResult () User))
 postMessage :: MonadWidget t m
             => Dynamic t (Either Text.Text Message)
             -> Event t ()
             -> m (Event t (ReqResult () [Message]))
-(postLogin :<|> (getUsers :<|> postMessage)) = apiClients
+(postLogin :<|> (getMe :<|> getUsers :<|> postMessage)) = apiClients

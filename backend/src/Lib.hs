@@ -82,8 +82,8 @@ server settings staticFolder =
   (login settings :<|> authenticatedServer settings) :<|> serveDirectoryFileServer staticFolder
 
 authenticatedServer :: ApiSettings -> AuthResult User -> Server AuthAPI
-authenticatedServer settings (Authenticated _) =
-    (pure users :<|> messages (connection settings))
+authenticatedServer settings (Authenticated user) =
+    (pure user :<|> pure users :<|> messages (connection settings))
 authenticatedServer _ _ = throwAll err401 -- unauthorized
 
 app :: ApiSettings -> FilePath -> Application

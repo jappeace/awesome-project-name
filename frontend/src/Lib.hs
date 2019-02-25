@@ -66,11 +66,13 @@ messageInput user = do
 
 loginWidget :: (MonadWidget t m) => m (Event t User)
 loginWidget = do
+  pb <- getPostBuild
+  autoLoginEvt <- getMe pb
   user <- userInput
   intButton <- button "login"
   postResult <- postLogin (Right <$> user) intButton
   void $ flash postResult $ text . Text.pack . show . reqFailure
-  pure $ current user <@ withSuccess postResult
+  pure $ leftmost [withSuccess autoLoginEvt, current user <@ withSuccess postResult]
 
 userInput :: (MonadWidget t m) => m (Dynamic t User)
 userInput = do

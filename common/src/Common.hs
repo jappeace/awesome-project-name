@@ -20,7 +20,8 @@ type AuthCookies a = Headers '[CookieHeader, OptCookieHeader] a
 type PublicAPI = "api" :> "1.0" :> "login" :> ReqBody '[JSON] User :> Post '[JSON] (AuthCookies NoContent)
 
 type AuthAPI =
-          "api" :> "1.0" :> "users" :> Get '[JSON] [User]
+          "api" :> "1.0" :> "me" :> Get '[JSON] User
+      :<|> "api" :> "1.0" :> "users" :> Get '[JSON] [User]
       :<|> "api" :> "1.0" :> "message" :> ReqBody '[JSON] Message :> Post '[JSON] [Message]
 
 data Message = Message {
