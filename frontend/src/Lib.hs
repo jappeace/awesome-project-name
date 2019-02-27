@@ -31,15 +31,24 @@ authenticatedWidget user =
     getUsersWidget
     sendMsgWidget user
 
-loginWidget :: (MonadWidget t m) => m (Event t User)
-loginWidget = do
+autoLogin :: (MonadWidget t m) => m (Event t User)
+autoLogin = do
   pb <- getPostBuild
-  autoLoginEvt <- getMe pb
+  withSuccess <$> getMe pb
+
+loginForm :: (MonadWidget t m) => m (Event t User)
+loginForm = do
   user <- userInput
   buttonEvt <- button "login"
   postResult <- postLogin (Right <$> user) buttonEvt
   void $ flash postResult $ text . Text.pack . show . reqFailure
-  pure $ leftmost [withSuccess autoLoginEvt, current user <@ withSuccess postResult]
+  pure $ current user <@ withSuccess postResult
+
+loginWidget :: (MonadWidget t m) => m (Event t User)
+loginWidget = do
+  autoLoginEvt <- autoLogin
+  formEvt <- loginForm
+  pure $ leftmost [formEvt, autoLoginEvt]
 
 sendMsgWidget :: MonadWidget t m => User -> m ()
 sendMsgWidget user =

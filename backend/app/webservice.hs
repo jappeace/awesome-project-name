@@ -3,6 +3,8 @@
 {-# LANGUAGE RecordWildCards   #-}
 module Main where
 
+import           Common.Xsrf
+import qualified Data.Text.Encoding         as Text
 import           Data.Time
 import           Database.PostgreSQL.Simple (connectPostgreSQL)
 import           DB.Cli
@@ -32,10 +34,12 @@ main = do
     cookieConf =
       defaultCookieSettings
         { cookieIsSecure = NotSecure -- allow setting of cookies over http, the reason for this is that we should stop providing http support, *or*, give all features on http.
-        , cookieXsrfSetting = Nothing
-        -- ^ TODO add xsrf protection https://github.com/haskell-servant/servant-auth#xsrf-and-the-frontend
-        -- last time I tried adding it it disabled permeneant cookies, dunno why
         , cookieMaxAge = Just $ secondsToDiffTime $ 60 * 60 * 24 * 365
+        , cookieXsrfSetting = Just $
+            def { xsrfCookieName = Text.encodeUtf8 cookieName
+                , xsrfHeaderName = Text.encodeUtf8 headerName
+                }
+
         }
 
 readSettings :: IO (PgConnectionString, BackendSettings)

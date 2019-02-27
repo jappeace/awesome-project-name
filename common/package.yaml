@@ -28,6 +28,7 @@ dependencies:
 - servant
 - cookie
 - servant-auth
+- bytestring
 
 library:
   source-dirs: src

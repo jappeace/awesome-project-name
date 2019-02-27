@@ -2,7 +2,7 @@
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 52a4e68dbe0a3ff8193a714a2bc788f2537552b1250f7bb410255ce846d200d6
+-- hash: 00f0c2590c0cfd2e6fd004e28c59e228c2cf7b1b569b4200159681693f4032e5
 
 cabal-version:  >= 1.10
 name:           frontend
@@ -38,6 +38,9 @@ library
     containers,
     cookie,
     http-api-data,
+    jsaddle,
+    jsaddle-dom,
+    lens,
     reflex,
     reflex-dom,
     servant,
@@ -71,6 +74,9 @@ executable webservice
     cookie,
     frontend,
     http-api-data,
+    jsaddle,
+    jsaddle-dom,
+    lens,
     reflex,
     reflex-dom,
     servant,
@@ -98,6 +104,9 @@ test-suite awesome-project-name-test
     cookie,
     frontend,
     http-api-data,
+    jsaddle,
+    jsaddle-dom,
+    lens,
     reflex,
     reflex-dom,
     servant,

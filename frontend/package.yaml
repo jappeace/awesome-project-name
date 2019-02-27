@@ -37,6 +37,9 @@ dependencies:
 - cookie
 - http-api-data
 - time
+- jsaddle
+- jsaddle-dom
+- lens
 
 library:
   source-dirs: src
