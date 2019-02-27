@@ -36,6 +36,7 @@ users :: [User]
 users =
   [ User "Isaac Newton"    "isaac@newton.co.uk"
   , User "Albert Einstein" "ae@mc2.org"
+  , User "jappie" "jappieklooster@hotmail.com"
   ]
 
 messages :: Connection -> Message -> Handler [Message]
