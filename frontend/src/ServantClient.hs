@@ -60,8 +60,9 @@ clientOpts = ClientOptions $ tweakReq
 --   (which is why we have the nomonomorphism restirction disabled)
 apiClients :: forall t m. (MonadWidget t m) => _
 apiClients = clientWithOptsAndResultHandler serviceAPI (Proxy @m) (Proxy @()) (constDyn url) clientOpts reloadOnAPIError
-  where url :: BaseUrl
-        url = BasePath "/"
+
+url :: BaseUrl
+url = BasePath "/"
 
 postLogin :: MonadWidget t m
           => Dynamic t (Either Text.Text User)
@@ -70,11 +71,17 @@ postLogin :: MonadWidget t m
 getUsers :: MonadWidget t m
           => Event t ()
           -> m (Event t (ReqResult () [User]))
-getMe :: MonadWidget t m
-          => Event t ()
-          -> m (Event t (ReqResult () User))
 postMessage :: MonadWidget t m
             => Dynamic t (Either Text.Text Message)
             -> Event t ()
             -> m (Event t (ReqResult () [Message]))
-(postLogin :<|> (getMe :<|> getUsers :<|> postMessage)) = apiClients
+(postLogin :<|> (_ :<|> getUsers :<|> postMessage)) = apiClients
+
+noResultHandlerClients :: forall t m. (MonadWidget t m) => _
+noResultHandlerClients = clientWithOpts serviceAPI (Proxy @m) (Proxy @()) (constDyn url) clientOpts
+
+-- | getme expects 401 so we isolate it.
+getMe :: MonadWidget t m
+          => Event t ()
+          -> m (Event t (ReqResult () User))
+(_ :<|> (getMe :<|> _)) = noResultHandlerClients
