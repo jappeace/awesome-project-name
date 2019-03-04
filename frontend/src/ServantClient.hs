@@ -30,6 +30,7 @@ import           Reflex
 import           Reflex.Dom
 import           Servant.API
 import           Servant.Reflex
+import           Servant.Reflex.Response
 
 
 getCookies :: JSM (Maybe Text.Text)
@@ -58,7 +59,7 @@ clientOpts = ClientOptions $ tweakReq
 --   they have the same wrapping monad however the containing type is different
 --   (which is why we have the nomonomorphism restirction disabled)
 apiClients :: forall t m. (MonadWidget t m) => _
-apiClients = clientWithOpts serviceAPI (Proxy @m) (Proxy @()) (constDyn url) clientOpts
+apiClients = clientWithOptsAndResultHandler serviceAPI (Proxy @m) (Proxy @()) (constDyn url) clientOpts reloadOnAPIError
   where url :: BaseUrl
         url = BasePath "/"
 
