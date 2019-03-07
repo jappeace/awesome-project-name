@@ -23,22 +23,7 @@ ghc-options: -Werror -Wall -Wcompat -Wincomplete-uni-patterns -Widentities
 
 dependencies:
 - base >= 4.7 && < 5
-- servant-server # http server
-- aeson # json
-- wai # web application (interface)
-- wai-extra
-- warp # web application implementation
-- bytestring
-- beam-core
-- beam-migrate
-- beam-postgres
-- postgresql-simple
-- common
-- text
-- optparse-applicative == 0.14.3.0
-- servant-auth-server
-- cookie
-- time
+- grenade
 
 library:
   source-dirs: src

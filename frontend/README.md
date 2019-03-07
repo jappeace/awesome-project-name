@@ -1,2 +1,0 @@
-# awesome-project-name
-
