@@ -2,7 +2,7 @@
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: c9bb84b6e0fba921f586dcc9367235a10eed4748748d7e861f71a5f99ae31297
+-- hash: f3e80090db4ab5eca91440a3d81619edf25fce4f507ea16498b410ae8d14b6df
 
 cabal-version:  >= 1.10
 name:           backend
@@ -29,112 +29,32 @@ library
       src
   ghc-options: -Werror -Wall -Wcompat -Wincomplete-uni-patterns -Widentities
   build-depends:
-      aeson
+      MonadRandom
     , base >=4.7 && <5
-    , beam-core
-    , beam-migrate
-    , beam-postgres
     , bytestring
-    , common
-    , cookie
-    , optparse-applicative ==0.14.3.0
-    , postgresql-simple
-    , servant-auth-server
-    , servant-server
-    , text
-    , time
-    , wai
-    , wai-extra
-    , warp
+    , cereal
+    , grenade
+    , hmatrix
+    , optparse-applicative
   exposed-modules:
-      DB
-      DB.Cli
       Lib
   other-modules:
       Paths_backend
   default-language: Haskell2010
 
-executable schema
-  main-is: schema.hs
+executable experiment
+  main-is: experiment.hs
   other-modules:
       Paths_backend
   hs-source-dirs:
       app
   ghc-options: -Werror -Wall -Wcompat -Wincomplete-uni-patterns -Widentities -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      aeson
-    , backend
+      MonadRandom
     , base >=4.7 && <5
-    , beam-core
-    , beam-migrate
-    , beam-postgres
     , bytestring
-    , common
-    , cookie
-    , optparse-applicative ==0.14.3.0
-    , postgresql-simple
-    , servant-auth-server
-    , servant-server
-    , text
-    , time
-    , wai
-    , wai-extra
-    , warp
-  default-language: Haskell2010
-
-executable webservice
-  main-is: webservice.hs
-  other-modules:
-      Paths_backend
-  hs-source-dirs:
-      app
-  ghc-options: -Werror -Wall -Wcompat -Wincomplete-uni-patterns -Widentities -threaded -rtsopts -with-rtsopts=-N
-  build-depends:
-      aeson
-    , backend
-    , base >=4.7 && <5
-    , beam-core
-    , beam-migrate
-    , beam-postgres
-    , bytestring
-    , common
-    , cookie
-    , optparse-applicative ==0.14.3.0
-    , postgresql-simple
-    , servant-auth-server
-    , servant-server
-    , text
-    , time
-    , wai
-    , wai-extra
-    , warp
-  default-language: Haskell2010
-
-test-suite awesome-project-name-test
-  type: exitcode-stdio-1.0
-  main-is: Spec.hs
-  other-modules:
-      Paths_backend
-  hs-source-dirs:
-      test
-  ghc-options: -Werror -Wall -Wcompat -Wincomplete-uni-patterns -Widentities -threaded -rtsopts -with-rtsopts=-N
-  build-depends:
-      aeson
-    , backend
-    , base >=4.7 && <5
-    , beam-core
-    , beam-migrate
-    , beam-postgres
-    , bytestring
-    , common
-    , cookie
-    , optparse-applicative ==0.14.3.0
-    , postgresql-simple
-    , servant-auth-server
-    , servant-server
-    , text
-    , time
-    , wai
-    , wai-extra
-    , warp
+    , cereal
+    , grenade
+    , hmatrix
+    , optparse-applicative
   default-language: Haskell2010

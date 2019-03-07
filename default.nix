@@ -9,6 +9,7 @@ in (import reflex-platform { }).project ({ pkgs, ... }: {
     };
     overrides = self: super: rec {
       grenade = self.callPackage ./packages/grenade.nix { }; # https://github.com/HuwCampbell/grenade/issues/87
+      # grenade = pkgs.haskell.lib.dontCheck (self.callPackage ./packages/grenade.nix { }); # workaround 
     };
 
     shells = {
