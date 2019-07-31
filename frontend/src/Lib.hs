@@ -19,24 +19,24 @@ import           ServantClient
 hidden :: Map.Map Text.Text Text.Text
 hidden = Map.singleton "style" "display:none;"
 
-reflex :: MonadWidget t m => m ()
+reflex :: DomBuilder t m => m ()
 reflex = do
   rec loginEvt <- elDynAttr "div" loginAttr loginWidget
       loginAttr <- holdDyn (Map.empty) $ hidden <$ loginEvt
   void $ holdEvent () loginEvt authenticatedWidget
 
-authenticatedWidget :: MonadWidget t m => User -> m ()
+authenticatedWidget :: DomBuilder t m => User -> m ()
 authenticatedWidget user =
   el "div" $ do
     getUsersWidget
     sendMsgWidget user
 
-autoLogin :: (MonadWidget t m) => m (Event t User)
+autoLogin :: (DomBuilder t m) => m (Event t User)
 autoLogin = do
   pb <- getPostBuild
   withSuccess <$> getMe pb
 
-loginForm :: (MonadWidget t m) => m (Event t User)
+loginForm :: (DomBuilder t m) => m (Event t User)
 loginForm = do
   user <- userInput
   buttonEvt <- button "login"
@@ -44,13 +44,13 @@ loginForm = do
   void $ flash postResult $ text . Text.pack . show . reqFailure
   pure $ current user <@ withSuccess postResult
 
-loginWidget :: (MonadWidget t m) => m (Event t User)
+loginWidget :: (DomBuilder t m) => m (Event t User)
 loginWidget = do
   autoLoginEvt <- autoLogin
   formEvt <- loginForm
   pure $ leftmost [formEvt, autoLoginEvt]
 
-sendMsgWidget :: MonadWidget t m => User -> m ()
+sendMsgWidget :: DomBuilder t m => User -> m ()
 sendMsgWidget user =
   el "div" $ do
     input <- messageInput user
@@ -64,7 +64,7 @@ sendMsgWidget user =
 
 
 fancyMsg ::
-     (MonadWidget t m)
+     (DomBuilder t m)
   => Dynamic t Message
   -> m (Element EventResult GhcjsDomSpace t)
 fancyMsg msg =
@@ -72,19 +72,19 @@ fancyMsg msg =
     _ <- elDynHtml' "h1" $ Text.pack . name . from <$> msg
     elDynHtml' "span" $ Text.pack . content <$> msg
 
-getUsersWidget :: MonadWidget t m => m ()
+getUsersWidget :: DomBuilder t m => m ()
 getUsersWidget =
   el "div" $ do
     intButton <- button "Get Users"
     serverInts <- fmapMaybe reqSuccess <$> getUsers intButton
     display =<< holdDyn ([User "none" "none"]) serverInts
 
-messageInput :: (MonadWidget t m) => User -> m (Dynamic t Message)
+messageInput :: (DomBuilder t m) => User -> m (Dynamic t Message)
 messageInput user = do
   message <- labeledInput "message"
   pure $ Message user <$> (Text.unpack <$> _textInput_value message)
 
-userInput :: (MonadWidget t m) => m (Dynamic t User)
+userInput :: (DomBuilder t m) => m (Dynamic t User)
 userInput = do
   username <- labeledInput "username"
   emailInput <- labeledInput "email"
@@ -92,7 +92,7 @@ userInput = do
     User . Text.unpack <$> _textInput_value username <*>
     (Text.unpack <$> _textInput_value emailInput)
 
-labeledInput :: (MonadWidget t m) => Text.Text -> m (TextInput t)
+labeledInput :: (DomBuilder t m) => Text.Text -> m (TextInput t)
 labeledInput label =
   elClass "div" "field" $ do
     elClass "label" "label" $ text label
