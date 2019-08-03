@@ -1,20 +1,22 @@
 { mkDerivation, aeson, base, bytestring, containers, dlist
 , fetchgit, free, ghc-prim, hashable, microlens, mtl, network-uri
-, stdenv, tagged, tasty, tasty-hunit, text, time, vector-sized
+, scientific, stdenv, tagged, tasty, tasty-hunit, text, time
+, vector, vector-sized
 }:
 mkDerivation {
   pname = "beam-core";
-  version = "0.7.2.3";
+  version = "0.8.0.0";
   src = fetchgit {
-    url = "https://github.com/tathougies/beam";
-    sha256 = "06gf5s3iqznd0gciacx9qbarlis7r0pv80iyid8slkyhxn42y3z7";
-    rev = "24a96f2f8d53558c33f1fe4031bd0687f9511e01";
+    url = "https://github.com/tathougies/beam.git";
+    sha256 = "02xc4qgc7kb0rv8g9dq69p3p0d2psp6b4mzq444hsavnsw2wsn9y";
+    rev = "737b73c6ec1c6aac6386bf9592a02a91f34a9478";
     fetchSubmodules = true;
   };
   postUnpack = "sourceRoot+=/beam-core; echo source root reset to $sourceRoot";
   libraryHaskellDepends = [
     aeson base bytestring containers dlist free ghc-prim hashable
-    microlens mtl network-uri tagged text time vector-sized
+    microlens mtl network-uri scientific tagged text time vector
+    vector-sized
   ];
   testHaskellDepends = [
     base bytestring tasty tasty-hunit text time

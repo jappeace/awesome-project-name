@@ -3,7 +3,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE TypeOperators     #-}
 
-module Common.Xsrf where
+module Awe.Common.Xsrf where
 
 import           Data.Text
 

@@ -13,19 +13,19 @@
 -- | This modules purpose is just to generate the xhr clients.
 --   there is some type magick going on generating these,
 --   therefore the functions are isolated.
-module ServantClient
+module Awe.Front.ServantClient
   ( postMessage, getUsers, postLogin, getMe
   ) where
 
-import           Common
-import           Common.Xsrf
+import           Awe.Common
+import           Awe.Common.Xsrf
 import           Control.Lens
 import           Data.Proxy
 import qualified Data.Text                as Text
 import           JSDOM                    (currentDocument)
 import qualified JSDOM.Generated.Document as Doc
 import           JSDOM.Types              (JSM)
-import           Orphanage                ()
+import           Awe.Front.Orphanage                ()
 import           Reflex
 import           Reflex.Dom
 import           Servant.API
@@ -62,18 +62,40 @@ apiClients = clientWithOpts serviceAPI (Proxy @m) (Proxy @()) (constDyn url) cli
   where url :: BaseUrl
         url = BasePath "/"
 
-postLogin :: MonadWidget t m
+postLogin :: (DomBuilder t m, Prerender js t m)
           => Dynamic t (Either Text.Text User)
           -> Event t ()
           -> m (Event t (ReqResult () (AuthCookies NoContent)))
-getUsers :: MonadWidget t m
+postLogin dd yy = fmap switchDyn $ prerender (pure never) $ postLogin' dd yy
+
+getUsers :: (DomBuilder t m, Prerender js t m)
           => Event t ()
           -> m (Event t (ReqResult () [User]))
-getMe :: MonadWidget t m
+getUsers dd = fmap switchDyn $ prerender (pure never) $ getUsers' dd
+
+getMe :: (DomBuilder t m, Prerender js t m)
           => Event t ()
           -> m (Event t (ReqResult () User))
-postMessage :: MonadWidget t m
+getMe dd = fmap switchDyn $ prerender (pure never) $ getMe' dd
+
+postMessage :: (DomBuilder t m, Prerender js t m)
             => Dynamic t (Either Text.Text Message)
             -> Event t ()
             -> m (Event t (ReqResult () [Message]))
-(postLogin :<|> (getMe :<|> getUsers :<|> postMessage)) = apiClients
+postMessage dd yy = fmap switchDyn $ prerender (pure never) $ postMessage' dd yy
+
+postLogin' :: MonadWidget t m
+          => Dynamic t (Either Text.Text User)
+          -> Event t ()
+          -> m (Event t (ReqResult () (AuthCookies NoContent)))
+getUsers' :: MonadWidget t m
+          => Event t ()
+          -> m (Event t (ReqResult () [User]))
+getMe' :: MonadWidget t m
+          => Event t ()
+          -> m (Event t (ReqResult () User))
+postMessage' :: MonadWidget t m
+            => Dynamic t (Either Text.Text Message)
+            -> Event t ()
+            -> m (Event t (ReqResult () [Message]))
+(postLogin' :<|> (getMe' :<|> getUsers' :<|> postMessage')) = apiClients

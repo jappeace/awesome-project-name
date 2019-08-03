@@ -5,9 +5,11 @@
         frontend = ./frontend;
     };
     overrides = self: super: rec {
+      servant-fiat-content = self.callPackage ./packages/servant-fiat-content.nix { };
+      bulmex = self.callPackage ./packages/bulmex.nix { };
       beam-core = self.callPackage ./packages/beam-core.nix { };
       beam-migrate = self.callPackage ./packages/beam-migrate.nix { };
-      beam-postgres = self.callPackage ./packages/beam-postgres.nix { };
+      beam-postgres = pkgs.haskell.lib.dontCheck (self.callPackage ./packages/beam-postgres.nix { });
       servant-reflex = self.callPackage ./packages/servant-reflex.nix { };
       servant = pkgs.haskell.lib.dontCheck (pkgs.haskell.lib.overrideCabal super.servant (drv: {
         testHaskellDepends = []; # servant has a dependency on testdoc 0.16.0 which fails to build in nix

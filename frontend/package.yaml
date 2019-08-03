@@ -29,6 +29,7 @@ dependencies:
 - servant-reflex
 - aeson # json
 - text
+- bulmex
 - reflex-dom
 - reflex
 - containers

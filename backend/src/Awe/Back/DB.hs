@@ -8,12 +8,12 @@
 {-# LANGUAGE TypeFamilies          #-}
 
 -- | db structure and source of truth
-module DB where
+module Awe.Back.DB where
 import qualified Data.Text                       as Text
 import           Database.Beam
 import           Database.Beam.Backend.SQL.Types (SqlSerial)
 import           Database.Beam.Migrate
-import           Database.Beam.Postgres          (PgCommandSyntax, Postgres)
+import           Database.Beam.Postgres          (Postgres)
 
 
 data UserT f = User
@@ -65,4 +65,4 @@ awesomeDB :: DatabaseSettings Postgres AwesomeDb
 awesomeDB = unCheckDatabase checkedAwesomeDB
 
 checkedAwesomeDB :: CheckedDatabaseSettings Postgres AwesomeDb
-checkedAwesomeDB = defaultMigratableDbSettings @PgCommandSyntax
+checkedAwesomeDB = defaultMigratableDbSettings @Postgres

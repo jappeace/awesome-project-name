@@ -39,6 +39,11 @@ dependencies:
 - servant-auth-server
 - cookie
 - time
+- frontend
+- servant-fiat-content
+- bulmex
+- reflex-dom-core
+- network-uri
 
 library:
   source-dirs: src

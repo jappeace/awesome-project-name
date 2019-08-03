@@ -1,8 +1,8 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Main where
 
-import           Lib
+import qualified Awe.Front.Main as App
 import           Reflex.Dom
 
 main :: IO ()
-main = mainWidget reflex
+main = mainWidget $ App.main $ App.IniState Nothing

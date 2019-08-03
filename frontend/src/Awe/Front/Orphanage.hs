@@ -2,12 +2,9 @@
 
 -- | Orphanage, put all your orphans in here for just the frontend.
 --   eg for types not used by backend.
-module Orphanage where
+module Awe.Front.Orphanage where
 
-import qualified Data.ByteString.Builder  as BS
-import qualified Data.ByteString.Lazy     as LBS
-import           Data.Text.Encoding       (decodeUtf8With, encodeUtf8)
-import           Data.Text.Encoding.Error (lenientDecode)
+import           Data.Text.Encoding (encodeUtf8)
 import           Web.Cookie
 import           Web.HttpApiData
 
@@ -20,7 +17,3 @@ import           Web.HttpApiData
 instance FromHttpApiData SetCookie where
   parseUrlPiece = parseHeader . encodeUtf8
   parseHeader = Right . parseSetCookie
-
-instance ToHttpApiData SetCookie where
-  toUrlPiece = decodeUtf8With lenientDecode . toHeader
-  toHeader = LBS.toStrict . BS.toLazyByteString . renderSetCookie

@@ -5,28 +5,31 @@
 {-# OPTIONS_GHC -fno-warn-orphans #-}
 
 
-module Lib
+module Awe.Back.Web
     ( webAppEntry, ApiSettings(..)
     ) where
 
-import           Common
+import           Awe.Common
 import           Control.Monad.IO.Class                   (liftIO)
 import           Network.Wai                              (Application)
-import qualified Network.Wai                              as Wai
 import           Network.Wai.Handler.Warp                 (run)
-import qualified Network.Wai.Middleware.Gzip              as Wai
+import           Reflex.Bulmex.Html                       (HeadSettings)
 import           Servant
 
+import qualified Awe.Back.DB                              as DB
 import           Database.Beam.Backend.SQL.BeamExtensions (runInsertReturningList)
 import           Database.PostgreSQL.Simple               (Connection)
-import qualified DB                                       as DB
 
+import           Awe.Back.Render
+import qualified Data.ByteString                          as BS
 import           Data.Text                                (pack, unpack)
 import qualified Database.Beam                            as Beam
 import qualified Database.Beam.Postgres                   as PgBeam
 import           Servant.Auth.Server
+import           Servant.HTML.Fiat
 
 type Webservice = ServiceAPI
+      :<|> Auth '[Cookie, JWT] User :> (Get '[HTML] BS.ByteString)
       :<|> Raw -- JS entry point
 
 webservice :: Proxy Webservice
@@ -44,13 +47,13 @@ messages conn message = do
   fromDb <- liftIO $
     PgBeam.runBeamPostgres conn $ do
       let user = from message
-      [foundUser] <- runInsertReturningList (DB._ausers DB.awesomeDB) $
+      [foundUser] <- runInsertReturningList $ Beam.insert (DB._ausers DB.awesomeDB) $
           Beam.insertExpressions [DB.User
             Beam.default_
             (Beam.val_ (pack $ name $ user ))
             (Beam.val_ (pack $ email $ user ))
         ]
-      _ <- runInsertReturningList (DB._messages DB.awesomeDB) $
+      _ <- runInsertReturningList  $ Beam.insert (DB._messages DB.awesomeDB) $
           Beam.insertExpressions
             [DB.Message
               Beam.default_
@@ -85,7 +88,9 @@ authenticatedServer _ _ = throwAll err401 -- unauthorized
 
 server :: ApiSettings -> FilePath -> Server Webservice
 server settings staticFolder =
-  (login settings :<|> authenticatedServer settings) :<|> serveDirectoryFileServer staticFolder
+  (login settings :<|> authenticatedServer settings)
+  :<|> renderHtmlEndpoint (headSettings settings)
+  :<|> serveDirectoryFileServer staticFolder
 
 app :: ApiSettings -> FilePath -> Application
 app settings staticFolder =
@@ -94,15 +99,13 @@ app settings staticFolder =
     context = cookieSettings settings :. jwtSettings settings :. EmptyContext
 
 webAppEntry :: ApiSettings -> FilePath -> IO ()
-webAppEntry settings staticFolder = run 6868 $ compress $ app settings staticFolder
-
-compress :: Wai.Middleware
-compress = Wai.gzip Wai.def { Wai.gzipFiles = Wai.GzipCompress }
+webAppEntry settings staticFolder = run 6868 $ app settings staticFolder
 
 data ApiSettings = ApiSettings
   { cookieSettings :: CookieSettings
   , jwtSettings    :: JWTSettings
   , connection     :: Connection
+  , headSettings   :: HeadSettings
   }
 
 -- doesn't make sense client side

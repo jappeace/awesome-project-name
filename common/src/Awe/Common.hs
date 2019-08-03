@@ -2,7 +2,7 @@
 {-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE TypeOperators #-}
 
-module Common where
+module Awe.Common where
 
 import           Data.Aeson   (FromJSON, ToJSON)
 import           Data.Proxy

@@ -2,7 +2,7 @@
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 9be3d5f45323cbd5330acd0d115f899bb18e3277e33f8f64c58ed5a89af6d334
+-- hash: 6b48da330913c712c7c9e5863a2bcdc56c43203abf94ac0b04dcb805fa2ee16f
 
 cabal-version:  >= 1.10
 name:           common
@@ -37,8 +37,8 @@ library
     , servant-auth
     , text
   exposed-modules:
-      Common
-      Common.Xsrf
+      Awe.Common
+      Awe.Common.Xsrf
   other-modules:
       Paths_common
   default-language: Haskell2010

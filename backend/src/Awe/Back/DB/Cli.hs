@@ -2,7 +2,7 @@
 
 
 -- | Deal with db
-module DB.Cli where
+module Awe.Back.DB.Cli where
 
 import qualified Data.ByteString     as BS
 import           Data.Monoid         ((<>))

@@ -3,8 +3,8 @@
 module Main where
 
 import           Database.PostgreSQL.Simple     (connectPostgreSQL)
-import           DB                             (checkedAwesomeDB)
-import           DB.Cli                         (PgConnectionString (..),
+import           Awe.Back.DB                             (checkedAwesomeDB)
+import           Awe.Back.DB.Cli                         (PgConnectionString (..),
                                                  postgresOptions,
                                                  unConnectionString)
 
