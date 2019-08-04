@@ -5,6 +5,7 @@
         frontend = ./frontend;
     };
     overrides = self: super: rec {
+      reflex-dom-helpers = self.callPackage ./packages/reflex-dom-helpers.nix { };
       servant-fiat-content = self.callPackage ./packages/servant-fiat-content.nix { };
       bulmex = self.callPackage ./packages/bulmex.nix { };
       beam-core = self.callPackage ./packages/beam-core.nix { };

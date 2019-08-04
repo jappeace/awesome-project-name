@@ -20,8 +20,8 @@ import qualified Data.Text                       as Text
 import           GHC.Generics                    (Generic)
 import           Reflex
 import           Reflex.Bulmex.Event
+import           Reflex.Bulmex.Html
 import           Reflex.Bulmex.Input.Polymorphic
-import           Reflex.Bulmex.Load
 import           Reflex.Dom                      as Dom hiding (TextInput,
                                                          textInput,
                                                          _textInput_value)
