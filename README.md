@@ -1,6 +1,6 @@
 # Awesome project name
 
-This is a reference project for my blog posts.
+This is a reference project for my blog posts about Haskell web services.
 Usually my workflow is:
 
 1.	Find something cool out during work, let's call it `A`.
