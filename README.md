@@ -2,9 +2,10 @@
 
 This is a reference project for my blog posts.
 Usually my workflow is:
-	Find something cool out during work, let's call it `A`.
-	Port `A` to this project.
-	Write words about `A` on my [blog](https://jappieklooster.nl)
+
+1.	Find something cool out during work, let's call it `A`.
+2.  Port `A` to this project.
+3.	Write words about `A` on my [blog](https://jappieklooster.nl)
 
 I link to branches from blogpost to make sure they remain
 relevant and not cluttered.
