@@ -7,8 +7,15 @@ Usually my workflow is:
 2.  Port `A` to this project.
 3.	Write words about `A` on my [blog](https://jappieklooster.nl)
 
-I link to branches from blogpost to make sure they remain
-relevant and not cluttered.
+I link to branches from blog post to make sure they remain
+relevant and not cluttered from the result of new blog posts.
+Branches also allow me to do fixes when necessary.
+Currently the ones I've wrote about are:
+
++ [Pragmatic haskell series](https://jappieklooster.nl/tag/pragmatic-haskell.html).
++ [Reflex and servant](https://jappieklooster.nl/fullstack-haskell-reflex-and-servant.html).
++ [Reflex authentication](https://jappieklooster.nl/authentication-in-reflex-servant.html).
++ [Reflex server side rendering](https://jappieklooster.nl/reflex-server-side-html-rendering.html)
 
 ## Deploy to AWS EC2 with NixOps
 
