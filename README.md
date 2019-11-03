@@ -1,4 +1,4 @@
-# Awesome project name
+[![Jappiejappie](https://img.shields.io/badge/jappieklooster.nl-jappiejappie-purple?style=for-the-badge)](https://www.twitch.tv/jappiejappie)
 
 This is a reference project for my blog posts about Haskell web services.
 Usually my workflow is:
