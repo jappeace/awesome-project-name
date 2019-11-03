@@ -1,4 +1,4 @@
-[![Jappiejappie](https://img.shields.io/badge/jappieklooster.nl-jappiejappie-purple?style=for-the-badge)](https://www.twitch.tv/jappiejappie)
+[![Jappiejappie](https://img.shields.io/badge/blog-jappieklooster.nl-purple?style=for-the-badge)](https://jappieklooster.nl)
 
 This is a reference project for my blog posts about Haskell web services.
 Usually my workflow is:
