@@ -24,3 +24,10 @@ Currently the ones I've wrote about are:
 * `nixops set-args -d awesome --argstr keyPair <your-aws-key.pem>`
 * `nixops set-args -d awesome --argstr accessKeyId <your-aws-access-key>`
 * `nixops deploy -d awesome`
+
+
+## Similar projects
+Other people have had similar ideas:
+
++ https://github.com/thalesmg/reflex-skeleton/
++ https://github.com/ElvishJerricco/reflex-project-skeleton
