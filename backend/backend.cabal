@@ -2,7 +2,7 @@
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: ccebb3de438d210e60bf1f6eafb9b7e95bcae54314ec7baea25e96e7f2d16f4c
+-- hash: 859fdaf656f7157c4f79c6f9e26aaa09a502937f9b662e1d07ce59119774cb6c
 
 cabal-version:  >= 1.10
 name:           backend
@@ -40,7 +40,7 @@ library
     , cookie
     , frontend
     , network-uri
-    , optparse-applicative ==0.14.3.0
+    , optparse-applicative
     , postgresql-simple
     , reflex-dom-core
     , servant-auth-server
@@ -80,7 +80,7 @@ executable schema
     , cookie
     , frontend
     , network-uri
-    , optparse-applicative ==0.14.3.0
+    , optparse-applicative
     , postgresql-simple
     , reflex-dom-core
     , servant-auth-server
@@ -113,7 +113,7 @@ executable webservice
     , cookie
     , frontend
     , network-uri
-    , optparse-applicative ==0.14.3.0
+    , optparse-applicative
     , postgresql-simple
     , reflex-dom-core
     , servant-auth-server
@@ -147,7 +147,7 @@ test-suite awesome-project-name-test
     , cookie
     , frontend
     , network-uri
-    , optparse-applicative ==0.14.3.0
+    , optparse-applicative
     , postgresql-simple
     , reflex-dom-core
     , servant-auth-server
