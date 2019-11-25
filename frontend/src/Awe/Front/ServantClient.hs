@@ -20,7 +20,6 @@ module Awe.Front.ServantClient
 
 import           Awe.Common
 import           Awe.Common.Xsrf
-import           Awe.Front.Orphanage      ()
 import           Control.Lens
 import           Data.Proxy
 import qualified Data.Text                as Text

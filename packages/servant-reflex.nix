@@ -9,9 +9,8 @@ mkDerivation {
   version = "0.3.5";
   src = fetchgit {
     url = "https://github.com/jappeace/servant-reflex";
-    sha256 = "1s26pa3znib9hpsrj8yqjvq30ps49zk2ifm54falsk8mlx9pz8fv";
-    rev = "1a15ab1cecb1ae49962234349f8d357d6ba47db7";
-    fetchSubmodules = true;
+    sha256 = "1lb2ppfjcjxfgan5rndwaa8s2lanhpdv258rbch38b0x5k4b6w1m";
+    rev = "70564c84f07d7aca2b529b5e9aacc6731e9eb467";
   };
   isLibrary = true;
   isExecutable = true;
