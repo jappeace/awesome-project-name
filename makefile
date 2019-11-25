@@ -19,7 +19,7 @@ build-js:
 	echo "https://github.com/ghcjs/ghcjs/wiki/Deployment"
 	echo "don't forget to minify"
 
-file-watch:
+file-watch: hpack
 	scripts/watch.sh
 
 update-cabal:
@@ -39,4 +39,8 @@ run: create-db
 clean:
 	rm -fR dist dist-*
 
+hpack:
+	nix-shell ./hpack-shell.nix --run "make update-cabal"
 
+etags:
+	nix-shell --run "hasktags  -e ./common/ ./frontend ./backend"
