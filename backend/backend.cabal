@@ -1,10 +1,11 @@
--- This file has been generated from package.yaml by hpack version 0.28.2.
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.31.2.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 3d26d5dfefd9b1774ab67cc436c88686552038acd9e47d1bac4538a55fd0b9d1
+-- hash: 92e15084c38dddf6c924399f56c4d4cd189a00a4fc3ce030f552c6dc4e12846b
 
-cabal-version:  >= 1.10
 name:           backend
 version:        1.0.0.0
 description:    Please see the README on GitHub at <https://github.com/githubuser/awesome-project-name#readme>
@@ -17,8 +18,8 @@ license:        MIT
 license-file:   LICENSE
 build-type:     Simple
 extra-source-files:
-    ChangeLog.md
     README.md
+    ChangeLog.md
 
 source-repository head
   type: git
@@ -134,7 +135,6 @@ test-suite unit
       Awe.Back.Render
       Awe.Back.Web
       Awe.Front.Main
-      Awe.Front.Orphanage
       Awe.Front.ServantClient
       Paths_backend
   hs-source-dirs:

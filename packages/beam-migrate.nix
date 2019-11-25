@@ -6,12 +6,11 @@
 }:
 mkDerivation {
   pname = "beam-migrate";
-  version = "0.4.0.0";
+  version = "0.4.0.1";
   src = fetchgit {
-    url = "https://github.com/tathougies/beam.git";
-    sha256 = "02xc4qgc7kb0rv8g9dq69p3p0d2psp6b4mzq444hsavnsw2wsn9y";
-    rev = "737b73c6ec1c6aac6386bf9592a02a91f34a9478";
-    fetchSubmodules = true;
+    url = "https://github.com/tathougies/beam";
+    sha256 = "1kyg22fmqnjy9xrjr1r6q786y57gxc6via57wwbdiy1cpq45bypy";
+    rev = "0fe21e4cb1efc8229017ab182bbbe4d0458aeb3a";
   };
   postUnpack = "sourceRoot+=/beam-migrate; echo source root reset to $sourceRoot";
   libraryHaskellDepends = [

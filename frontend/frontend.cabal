@@ -1,10 +1,11 @@
--- This file has been generated from package.yaml by hpack version 0.28.2.
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.31.2.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 013207f8a1f74df86c3e0fadc4739993aef72906e2f0a6853d23aea81cf2212e
+-- hash: 4756b542ab540fbce136fa40e4dda94b56a11f0bccb801e276a4b2b121548bed
 
-cabal-version:  >= 1.10
 name:           frontend
 version:        1.0.0.0
 description:    Please see the README on GitHub at <https://github.com/githubuser/awesome-project-name#readme>
@@ -17,8 +18,8 @@ maintainer:     jappieklooster@hotmail.com
 copyright:      2018 Jappie Klooster
 build-type:     Simple
 extra-source-files:
-  ChangeLog.md
   README.md
+  ChangeLog.md
 
 source-repository head
   type: git
@@ -50,7 +51,6 @@ library
     time
   exposed-modules:
     Awe.Front.Main
-    Awe.Front.Orphanage
     Awe.Front.ServantClient
   other-modules:
     Paths_frontend
