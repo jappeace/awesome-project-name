@@ -1,5 +1,5 @@
 [![Jappiejappie](https://img.shields.io/badge/blog-jappieklooster.nl-lightgrey?style=for-the-badge)](https://jappieklooster.nl)
-![Build status](https://img.shields.io/travis/jappeace/awesome-project-name?style=for-the-badge)
+[![Build status](https://img.shields.io/travis/jappeace/awesome-project-name?style=for-the-badge)](https://travis-ci.org/jappeace/awesome-project-name/builds/)
 
 This is a reference project for my blog posts about Haskell web services.
 Usually my workflow is:
