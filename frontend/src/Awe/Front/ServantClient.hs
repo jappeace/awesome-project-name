@@ -9,6 +9,7 @@
 {-# LANGUAGE TypeOperators             #-}
 
 {-# OPTIONS_GHC  -Wno-partial-type-signatures #-}
+{-# OPTIONS_GHC  -Wno-simplifiable-class-constraints #-}
 
 -- | This modules purpose is just to generate the xhr clients.
 --   there is some type magick going on generating these,
@@ -19,13 +20,13 @@ module Awe.Front.ServantClient
 
 import           Awe.Common
 import           Awe.Common.Xsrf
+import           Awe.Front.Orphanage      ()
 import           Control.Lens
 import           Data.Proxy
 import qualified Data.Text                as Text
 import           JSDOM                    (currentDocument)
 import qualified JSDOM.Generated.Document as Doc
 import           JSDOM.Types              (JSM)
-import           Awe.Front.Orphanage                ()
 import           Reflex
 import           Reflex.Dom
 import           Servant.API

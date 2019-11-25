@@ -22,6 +22,9 @@ build-js:
 file-watch: hpack
 	scripts/watch.sh
 
+ghcid: clean 
+	nix-shell --run "ghcid -s \"import Main\" -c \"make update-cabal && cabal new-repl \" -T \"main\" test:unit"
+
 update-cabal:
 	hpack ./backend
 	hpack ./common

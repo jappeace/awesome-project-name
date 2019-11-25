@@ -2,7 +2,7 @@
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 859fdaf656f7157c4f79c6f9e26aaa09a502937f9b662e1d07ce59119774cb6c
+-- hash: 3d26d5dfefd9b1774ab67cc436c88686552038acd9e47d1bac4538a55fd0b9d1
 
 cabal-version:  >= 1.10
 name:           backend
@@ -76,9 +76,7 @@ executable schema
     , beam-postgres
     , bulmex
     , bytestring
-    , common
     , cookie
-    , frontend
     , network-uri
     , optparse-applicative
     , postgresql-simple
@@ -109,9 +107,7 @@ executable webservice
     , beam-postgres
     , bulmex
     , bytestring
-    , common
     , cookie
-    , frontend
     , network-uri
     , optparse-applicative
     , postgresql-simple
@@ -126,32 +122,54 @@ executable webservice
     , warp
   default-language: Haskell2010
 
-test-suite awesome-project-name-test
+test-suite unit
   type: exitcode-stdio-1.0
   main-is: Spec.hs
   other-modules:
+      Awe.Common
+      Awe.Common.Xsrf
+      Test.TestSpec
+      Awe.Back.DB
+      Awe.Back.DB.Cli
+      Awe.Back.Render
+      Awe.Back.Web
+      Awe.Front.Main
+      Awe.Front.Orphanage
+      Awe.Front.ServantClient
       Paths_backend
   hs-source-dirs:
+      ../common/src
       test
+      src
+      ../frontend/src
   ghc-options: -Werror -Wall -Wcompat -Wincomplete-uni-patterns -Widentities -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       aeson
-    , backend
     , base >=4.7 && <5
     , beam-core
     , beam-migrate
     , beam-postgres
     , bulmex
     , bytestring
-    , common
+    , containers
     , cookie
-    , frontend
+    , hspec
+    , hspec-core
+    , http-api-data
+    , jsaddle
+    , jsaddle-dom
+    , lens
     , network-uri
     , optparse-applicative
     , postgresql-simple
+    , reflex
+    , reflex-dom
     , reflex-dom-core
+    , servant
+    , servant-auth
     , servant-auth-server
     , servant-fiat-content
+    , servant-reflex
     , servant-server
     , text
     , time

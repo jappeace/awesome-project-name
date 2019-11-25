@@ -4,6 +4,7 @@
         backend = ./backend;
         frontend = ./frontend;
     };
+    withHoogle = false;
     overrides = self: super:
     let 
     dontcheck = lib: pkgs.haskell.lib.dontCheck (pkgs.haskell.lib.overrideCabal lib (drv: {

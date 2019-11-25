@@ -33,13 +33,11 @@ dependencies:
 - beam-migrate
 - beam-postgres
 - postgresql-simple
-- common
 - text
 - optparse-applicative
 - servant-auth-server
 - cookie
 - time
-- frontend
 - servant-fiat-content
 - bulmex
 - reflex-dom-core
@@ -47,6 +45,9 @@ dependencies:
 
 library:
   source-dirs: src
+  dependencies:
+    - common
+    - frontend
 
 executables:
   webservice:
@@ -69,13 +70,29 @@ executables:
     - backend
 
 tests:
-  awesome-project-name-test:
+  unit:
     main:                Spec.hs
-    source-dirs:         test
+    source-dirs:
+    - ../common/src
+    - test
+    # including extra source dirs allows ghcid to watch
+    - src 
+    - ../frontend/src
     ghc-options:
     - -threaded
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:
-    - backend
+    - hspec
+    - hspec-core
+    - servant
+    - servant-auth
+    - http-api-data
+    - lens
+    - jsaddle-dom
+    - jsaddle
+    - reflex-dom
+    - reflex
+    - servant-reflex
+    - containers
 

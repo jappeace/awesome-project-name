@@ -18,7 +18,33 @@ Currently the ones I've wrote about are:
 + [Reflex authentication](https://jappieklooster.nl/authentication-in-reflex-servant.html).
 + [Reflex server side rendering](https://jappieklooster.nl/reflex-server-side-html-rendering.html)
 
-## Deploy to AWS EC2 with NixOps
+# Building
+
+A good dev setup is available with:
+```bash
+make ghcid
+```
+Adding dependencies now takes updating two dependency
+list, checkout this blogpost for the [complete description](https://jappieklooster.nl/ghcid-for-multi-package-projects.html).
+
+Production builds can be made with nix.
+You can significantly speedup the building of dependencies
+by adding the following binary cache to your `configuration.nix`:
+
+```nix
+  nix = {
+    binaryCaches = [
+      "https://jappie.cachix.org"
+    ];
+    binaryCachePublicKeys = [
+      "jappie.cachix.org-1:+5Liddfns0ytUSBtVQPUr/Wo6r855oNLgD4R8tm1AE4="
+    ];
+  };
+```
+
+This will be automatically updated with help of travis CI.
+
+# Deploy to AWS EC2 with NixOps
 
 * On your AWS console, create a security group called "awesome" in the Oregon region. Give it inbound TCP 22 and 6868 permission.
 * `nixops create -d awesome deployment.nix`
@@ -27,7 +53,7 @@ Currently the ones I've wrote about are:
 * `nixops deploy -d awesome`
 
 
-## Similar projects
+# Similar projects
 Other people have had similar ideas:
 
 + https://github.com/thalesmg/reflex-skeleton/
