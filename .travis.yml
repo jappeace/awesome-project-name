@@ -1,6 +1,8 @@
 ---
 language: nix
-script: nix-build -A ghc.backend
+script:
+  - cat /etc/nix/nix.conf
+  - nix-build -A ghc.backend
 
 # https://nixos.wiki/wiki/Nix_on_Travis
 cache:
