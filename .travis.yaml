@@ -1,0 +1,2 @@
+language: nix
+script: nix-build -A ghc.backend ./default.nix
