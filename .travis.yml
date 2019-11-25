@@ -3,6 +3,7 @@ language: nix
 script:
   - cat /etc/nix/nix.conf # had some issues with this, kindoff important so always cat this is good
   - nix-build -A ghc.backend
+  - nix-build -A ghcjs.frontend
   - echo "Wait 4 cachix"
   - sleep 10 # wait for cachix
   - echo "Done, eat pi"
@@ -15,5 +16,5 @@ before_install:
 before_script:
   - sudo mkdir -p /etc/nix && echo 'sandbox = true' | sudo tee -a /etc/nix/nix.conf
   - nix-env -iA cachix -f https://cachix.org/api/v1/install
-  - if [ -n "$CACHIX_SIGNING_KEY" ]; then cachix push jappie --watch-store; fi &
+  - if [ -n "$CACHIX_SIGNING_KEY" ]; then cachix push jappie --watch-store &; else echo "no cachix key found"; fi
 
