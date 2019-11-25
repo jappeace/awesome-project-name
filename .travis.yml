@@ -17,5 +17,5 @@ before_cache:
 - nix copy --to file://$HOME/nix.store -f default.nix ghc.backend
 
 before_script:
-  - sudo mkdir /etc/nix && echo 'sandbox = true' | sudo tee /etc/nix/nix.conf
+  - sudo mkdir -p /etc/nix && echo 'sandbox = true' | sudo tee /etc/nix/nix.conf
 
