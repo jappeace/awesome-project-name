@@ -3,16 +3,17 @@ language: nix
 script:
   - cat /etc/nix/nix.conf # had some issues with this, kindoff important so always cat this is good
   - nix-build -A ghc.backend
+  - echo "Wait 4 cachix"
+  - sleep 10 # wait for cachix
+  - echo "Done, eat pi"
 
 before_install:
 - sudo mkdir -p /etc/nix
 - echo "substituters = https://jappie.cachix.org https://cache.nixos.org https://nixcache.reflex-frp.org https://static-haskell-nix.cachix.org https://hydra.iohk.io" | sudo tee -a /etc/nix/nix.conf > /dev/null
 - echo "trusted-public-keys = jappie.cachix.org-1:+5Liddfns0ytUSBtVQPUr/Wo6r855oNLgD4R8tm1AE4= cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= ryantrinkle.com-1:JJiAKaRv9mWgpVAz8dwewnZe0AzzEAzPkagE9SP5NWI= static-haskell-nix.cachix.org-1:Q17HawmAwaM1/BfIxaEDKAxwTOyRVhPG5Ji9K3+FvUU= hydra.iohk.io:f/Ea+s+dFdN+3Y/G+FDgSq+a5NEWhJGzdjvKNGv0/EQ=" | sudo tee -a /etc/nix/nix.conf > /dev/null
 
-before_cache:
-- mkdir -p $HOME/nix.store
-- nix copy --to file://$HOME/nix.store -f default.nix ghc.backend
-
 before_script:
   - sudo mkdir -p /etc/nix && echo 'sandbox = true' | sudo tee -a /etc/nix/nix.conf
+  - nix-env -iA cachix -f https://cachix.org/api/v1/install
+  - if [ -n "$CACHIX_SIGNING_KEY" ]; then cachix push jappie --watch-store; fi &
 
