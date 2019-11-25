@@ -35,7 +35,7 @@ dependencies:
 - postgresql-simple
 - common
 - text
-- optparse-applicative == 0.14.3.0
+- optparse-applicative
 - servant-auth-server
 - cookie
 - time

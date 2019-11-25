@@ -4,7 +4,15 @@
         backend = ./backend;
         frontend = ./frontend;
     };
-    overrides = self: super: rec {
+    overrides = self: super:
+    let 
+    dontcheck = lib: pkgs.haskell.lib.dontCheck (pkgs.haskell.lib.overrideCabal lib (drv: {
+        # prevent hpack from being build for package.yaml on ghcjs
+        libraryToolDepends = [ ]; 
+        preConfigure = "";
+      }));
+    in
+    rec {
       reflex-dom-helpers = self.callPackage ./packages/reflex-dom-helpers.nix { };
       servant-fiat-content = self.callPackage ./packages/servant-fiat-content.nix { };
       bulmex = self.callPackage ./packages/bulmex.nix { };
@@ -15,9 +23,9 @@
       servant = pkgs.haskell.lib.dontCheck (pkgs.haskell.lib.overrideCabal super.servant (drv: {
         testHaskellDepends = []; # servant has a dependency on testdoc 0.16.0 which fails to build in nix
       }));
-      backend = pkgs.haskell.lib.overrideCabal super.backend (drv: { enableSharedExecutables = false; });
-      common = pkgs.haskell.lib.dontHaddock (pkgs.haskell.lib.overrideCabal super.common (drv: { libraryToolDepends = []; }));
-      frontend = pkgs.haskell.lib.dontHaddock (pkgs.haskell.lib.overrideCabal super.frontend (drv: { libraryToolDepends = []; }));
+      backend = dontcheck (pkgs.haskell.lib.overrideCabal super.backend (drv: { enableSharedExecutables = false; }));
+      common = dontcheck (pkgs.haskell.lib.dontHaddock super.common);
+      frontend = dontcheck (pkgs.haskell.lib.dontHaddock super.frontend);
     };
 
     shells = {
@@ -28,5 +36,6 @@
     shellToolOverrides = ghc: super: {
         ccjs = pkgs.closurecompiler;
         vim = pkgs.vim;
+        hpack = pkgs.haskellPackages.hpack;
     };
 })
