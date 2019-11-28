@@ -47,3 +47,9 @@ hpack:
 
 etags:
 	nix-shell --run "hasktags  -e ./common/ ./frontend ./backend"
+
+brittany_:
+	$(shell set -xe; for i in `fd hs`; do brittany --write-mode=inplace $$i; done)
+
+brittany:
+	nix-shell ./travis-shell.nix --run "make brittany_"
