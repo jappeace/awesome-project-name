@@ -7,7 +7,7 @@ import           Awe.Back.DB.Cli
 import           Awe.Back.Web
 import           Data.Maybe
 import           Data.Time
-import           Database.PostgreSQL.Simple (connectPostgreSQL)
+import           Database.PostgreSQL.Simple     ( connectPostgreSQL )
 import           Network.URI
 import           Options.Applicative
 import           Reflex.Bulmex.Html
