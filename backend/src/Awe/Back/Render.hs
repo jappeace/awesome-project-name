@@ -19,7 +19,7 @@ import           Servant
 import           Servant.Auth.Server
 
 renderHtmlEndpoint :: HeadSettings -> AuthResult User -> Handler BS.ByteString
-renderHtmlEndpoint settings authRes = do
+renderHtmlEndpoint settings authRes =
   fmap snd $ liftIO $ renderStatic $
     htmlWidget settings $ main $ IniState $ toMaybe authRes
 

@@ -1,12 +1,12 @@
 {-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE RecordWildCards   #-}
+
 module Main where
 
-import           Database.PostgreSQL.Simple     (connectPostgreSQL)
-import           Awe.Back.DB                             (checkedAwesomeDB)
-import           Awe.Back.DB.Cli                         (PgConnectionString (..),
+import           Awe.Back.DB                    (checkedAwesomeDB)
+import           Awe.Back.DB.Cli                (PgConnectionString (..),
                                                  postgresOptions,
                                                  unConnectionString)
+import           Database.PostgreSQL.Simple     (connectPostgreSQL)
 
 import           Data.Monoid                    ((<>))
 import           Database.Beam.Migrate.Simple   (createSchema)

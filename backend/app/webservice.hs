@@ -1,4 +1,3 @@
-{-# LANGUAGE LambdaCase        #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE RecordWildCards   #-}
 
@@ -37,7 +36,7 @@ main = do
                     [defScript{
                         _script_uri = maybe
                           (error "could not parse uri all.js") id
-                          $ (parseURIReference "all.js")
+                          $ parseURIReference "all.js"
                         }]
                 , _head_css = []
                 , _head_title = "awesomeproj"

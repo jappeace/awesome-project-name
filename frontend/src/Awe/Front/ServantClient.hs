@@ -43,7 +43,7 @@ findCookie which = do
   mayCookies <- getCookies
   case mayCookies of
     Nothing -> pure Nothing
-    Just cookies -> do
+    Just cookies ->
       pure $ Just $ Text.takeWhile ((/=) ';') $ Text.drop 1 $ Text.dropWhile ((/=) '=') $ snd $ Text.breakOn which cookies
 
 clientOpts :: ClientOptions

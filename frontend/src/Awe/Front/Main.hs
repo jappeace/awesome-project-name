@@ -38,7 +38,7 @@ type AWidget js t m
      , MonadHold t m
      , MonadFix m
      , TriggerEvent t m
-     , (MonadIO (Performable m))
+     , MonadIO (Performable m)
      , PostBuild t m)
 
 newtype IniState =
@@ -52,7 +52,7 @@ main :: (AWidget js t m) => IniState -> m ()
 main iniState = do
   iniDyn <- writeReadDom "iniState" iniState
   rec loginEvt <- elDynAttr "div" loginAttr $ loginWidget iniDyn
-      loginAttr <- holdDyn (Map.empty) $ hidden <$ loginEvt
+      loginAttr <- holdDyn Map.empty $ hidden <$ loginEvt
   void $ holdEvent () loginEvt authenticatedWidget
 
 authenticatedWidget ::
@@ -84,7 +84,7 @@ loginWidget iniDyn = do
   pure $
     leftmost
       [formEvt,
-       noNothing $ updated $ userDyn,
+       noNothing $ updated userDyn,
        noNothing $ current userDyn <@ pb]
   where
     userDyn = unpackUser <$> iniDyn
@@ -108,7 +108,7 @@ sendMsgWidget user =
     messages <- fmapMaybe reqSuccess <$> postMessage (Right <$> input) sendMsg
     resulting <-
       holdDyn
-        ([Message (User "none" "none") "ddd"]) -- what to show if nothing
+        [Message (User "none" "none") "ddd"] -- what to show if nothing
         messages -- source of messages (if any)
     void $ el "div" $ simpleList resulting fancyMsg
 
@@ -124,7 +124,7 @@ getUsersWidget =
   el "div" $ do
     intButton <- button "Get Users"
     serverInts <- fmapMaybe reqSuccess <$> getUsers intButton
-    display =<< holdDyn ([User "none" "none"]) serverInts
+    display =<< holdDyn [User "none" "none"] serverInts
 
 messageInput :: (DomBuilder t m, PostBuild t m) => User -> m (Dynamic t Message)
 messageInput user = do
