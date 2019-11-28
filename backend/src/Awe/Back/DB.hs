@@ -8,11 +8,12 @@
 
 -- | db structure and source of truth
 module Awe.Back.DB where
-import qualified Data.Text                       as Text
+import qualified Data.Text                     as Text
 import           Database.Beam
-import           Database.Beam.Backend.SQL.Types (SqlSerial)
+import           Database.Beam.Backend.SQL.Types
+                                                ( SqlSerial )
 import           Database.Beam.Migrate
-import           Database.Beam.Postgres          (Postgres)
+import           Database.Beam.Postgres         ( Postgres )
 
 
 data UserT f = User
@@ -26,8 +27,8 @@ deriving instance Show UserId
 deriving instance Show User
 
 instance Table UserT where
-    data PrimaryKey UserT f = UserId (Columnar f (SqlSerial Int)) deriving Generic
-    primaryKey = UserId . _user_id
+  data PrimaryKey UserT f = UserId (Columnar f (SqlSerial Int)) deriving Generic
+  primaryKey = UserId . _user_id
 type UserId = PrimaryKey UserT Identity -- For convenience
 
 instance Beamable UserT
@@ -45,8 +46,8 @@ deriving instance Show (PrimaryKey MessageT Identity)
 deriving instance Show Message
 
 instance Table MessageT where
-    data PrimaryKey MessageT f = MessageId (Columnar f (SqlSerial Int)) deriving Generic
-    primaryKey = MessageId . _message_id
+  data PrimaryKey MessageT f = MessageId (Columnar f (SqlSerial Int)) deriving Generic
+  primaryKey = MessageId . _message_id
 type MessageId = PrimaryKey MessageT Identity -- For convenience
 
 instance Beamable MessageT

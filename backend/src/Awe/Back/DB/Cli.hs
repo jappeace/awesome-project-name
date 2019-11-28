@@ -4,8 +4,8 @@
 -- | Deal with db
 module Awe.Back.DB.Cli where
 
-import qualified Data.ByteString     as BS
-import           Data.Monoid         ((<>))
+import qualified Data.ByteString               as BS
+import           Data.Monoid                    ( (<>) )
 import           Options.Applicative
 
 defaultConnectionString :: BS.ByteString
@@ -15,10 +15,10 @@ newtype PgConnectionString = PgConnectionString { unConnectionString :: BS.ByteS
 
 postgresOptions :: Parser PgConnectionString
 postgresOptions = PgConnectionString <$> strOption
-    (  short 'd'
-    <> long "database"
-    <> metavar "DB_CONNECTION_STRING"
-    <> value defaultConnectionString
-    <> help "The Postgres database connection string"
-    <> showDefault
-    )
+  (  short 'd'
+  <> long "database"
+  <> metavar "DB_CONNECTION_STRING"
+  <> value defaultConnectionString
+  <> help "The Postgres database connection string"
+  <> showDefault
+  )
