@@ -29,7 +29,7 @@ import           Servant.Auth.Server
 import           Servant.HTML.Fiat
 
 type Webservice = ServiceAPI
-      :<|> Auth '[Cookie, JWT] User :> (Get '[HTML] BS.ByteString)
+      :<|> Auth '[Cookie, JWT] User :> Get '[HTML] BS.ByteString
       :<|> Raw -- JS entry point
 
 webservice :: Proxy Webservice
@@ -50,8 +50,8 @@ messages conn message = do
       [foundUser] <- runInsertReturningList $ Beam.insert (DB._ausers DB.awesomeDB) $
           Beam.insertExpressions [DB.User
             Beam.default_
-            (Beam.val_ (pack $ name $ user ))
-            (Beam.val_ (pack $ email $ user ))
+            (Beam.val_ (pack $ name user ))
+            (Beam.val_ (pack $ email user ))
         ]
       _ <- runInsertReturningList  $ Beam.insert (DB._messages DB.awesomeDB) $
           Beam.insertExpressions
@@ -61,7 +61,7 @@ messages conn message = do
               (Beam.val_ (pack $ content message))
             ]
       Beam.runSelectReturningList $ Beam.select $ do
-        usr <- (Beam.all_ (DB._ausers DB.awesomeDB))
+        usr <- Beam.all_ (DB._ausers DB.awesomeDB)
         msg <- Beam.oneToMany_ (DB._messages DB.awesomeDB) DB._from usr
         pure (msg, usr)
   pure $
@@ -74,7 +74,7 @@ messages conn message = do
     ) fromDb
 
 login :: ApiSettings -> User -> Handler (AuthCookies NoContent)
-login settings user = if elem user users then do
+login settings user = if user `elem` users then do
     withCookies <- liftIO $ acceptLogin cookies (jwtSettings settings) user
     pure $ maybe (clearSession cookies NoContent) (\x -> x NoContent) withCookies
   else throwAll err401 -- unauthorized
@@ -83,7 +83,7 @@ login settings user = if elem user users then do
 
 authenticatedServer :: ApiSettings -> AuthResult User -> Server AuthAPI
 authenticatedServer settings (Authenticated user) =
-    (pure user :<|> pure users :<|> messages (connection settings))
+    pure user :<|> pure users :<|> messages (connection settings)
 authenticatedServer _ _ = throwAll err401 -- unauthorized
 
 server :: ApiSettings -> FilePath -> Server Webservice
