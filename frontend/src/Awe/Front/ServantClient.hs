@@ -44,10 +44,10 @@ findCookie which = do
   case mayCookies of
     Nothing -> pure Nothing
     Just cookies ->
-      pure $ Just $ Text.takeWhile ((/=) ';') $ Text.drop 1 $ Text.dropWhile ((/=) '=') $ snd $ Text.breakOn which cookies
+      pure $ Just $ Text.takeWhile (';' /=) $ Text.drop 1 $ Text.dropWhile ('=' /=) $ snd $ Text.breakOn which cookies
 
 clientOpts :: ClientOptions
-clientOpts = ClientOptions $ tweakReq
+clientOpts = ClientOptions tweakReq
   where
     tweakReq r = do
       mayCookie <- findCookie cookieName

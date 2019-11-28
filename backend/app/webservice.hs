@@ -5,8 +5,9 @@ module Main where
 
 import           Awe.Back.DB.Cli
 import           Awe.Back.Web
+import           Data.Maybe
 import           Data.Time
-import           Database.PostgreSQL.Simple     ( connectPostgreSQL )
+import           Database.PostgreSQL.Simple (connectPostgreSQL)
 import           Network.URI
 import           Options.Applicative
 import           Reflex.Bulmex.Html
@@ -34,7 +35,7 @@ main = do
         HeadSettings
           { _head_js    =
             [ defScript
-                { _script_uri = maybe (error "could not parse uri all.js") id
+                { _script_uri = fromMaybe (error "could not parse uri all.js")
                                   $ parseURIReference "all.js"
                 }
             ]
